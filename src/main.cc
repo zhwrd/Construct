@@ -4,11 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "config.h"
+
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_audio.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+
+//#include <OpenGL/gl.h>
+//#include <OpenGL/glu.h>
 
 // Audio
 int sample_size = 16;

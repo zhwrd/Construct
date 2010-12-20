@@ -1,0 +1,3 @@
+/* OpenGL include directory */
+#cmakedefine HAVE_GL
+#cmakedefine HAVE_OPENGL
