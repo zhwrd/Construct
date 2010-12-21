@@ -12,6 +12,8 @@
 #include <audiodrivers/sdlout.h>
 
 // Audio
+construct::audiodrivers::SDLOut* audio_out;
+construct::audiodrivers::AudioDriverSettings settings;
 int sample_size = 16;
 int sample_rate = 44100;
 double freq = 440.0;
@@ -28,25 +30,7 @@ double* synth(void* context, int num_samples);
 void initialize_video();
 void initialize_audio();
 void initialize_sdl();
-
-int main(int argc, char* argv[]) {
-  double length = sample_rate/freq;
-  double omega = 3.14159*2/length;
-  g_length = (int)length;
-  g_waveform = (double*)malloc(g_length*sizeof(double));
-  for (int i = 0; i < g_length; ++i) {
-    g_waveform[i] = sin(omega*i);
-  }
-  g_waveout = (double*)malloc(940*sizeof(*g_waveout));
-  initialize_sdl();
-
-  construct::audiodrivers::SDLOut out;
-  out.set_callback(synth, NULL);
-  out.Start();
-
-  char c = getchar();
-  return 0;
-}
+void create_wavetable();
 
 double* synth(void* context, int num_samples) {
   for (int i = 0; i < num_samples; ++i) {
@@ -55,6 +39,34 @@ double* synth(void* context, int num_samples) {
     position %= g_length;
   }
   return g_waveout;
+}
+
+int main(int argc, char* argv[]) {
+  initialize_sdl();
+  initialize_audio();
+  create_wavetable();
+  audio_out->Start();
+  char c = getchar();
+  return 0;
+}
+
+void create_wavetable() {
+  double length = settings.sample_rate/freq;
+  double omega = 3.14159*2/length;
+  g_length = (int)length;
+  g_waveform = (double*)malloc(g_length*sizeof(double));
+  for (int i = 0; i < g_length; ++i) {
+    g_waveform[i] = sin(omega*i);
+  }
+}
+
+void initialize_audio() {
+  using namespace construct::audiodrivers;
+  settings.num_channels = 1;
+  audio_out = new SDLOut();
+  audio_out->set_callback(synth, NULL);
+  audio_out->Open(settings, settings);
+  g_waveout = (double*)malloc(settings.num_samples*sizeof(*g_waveout));
 }
 
 void initialize_video() {

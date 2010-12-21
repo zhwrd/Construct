@@ -1,5 +1,4 @@
 #include "sdlout.h"
-#include <iostream>
 
 namespace construct {
 namespace audiodrivers {
@@ -12,13 +11,14 @@ SDLOut::~SDLOut() {
   DoStop();
 }
 
-void SDLOut::DoStart() {
+void SDLOut::Open(AudioDriverSettings& requested,
+                  AudioDriverSettings& obtained) {
   SDL_AudioSpec desired_format;
   SDL_AudioSpec obtained_format;
-  desired_format.freq = 44100;
-  desired_format.format = AUDIO_S16SYS;
-  desired_format.channels = 1;
-  desired_format.samples = 512;
+  desired_format.freq = requested.sample_rate;
+  desired_format.format = GetSDLFormat(requested.sample_size);
+  desired_format.channels = requested.num_channels;
+  desired_format.samples = requested.num_samples;
   desired_format.callback = Process;
   desired_format.userdata = this;
 
@@ -26,15 +26,41 @@ void SDLOut::DoStart() {
     exit(1);
   }
 
-  int samples = obtained_format.samples;
-  samples_ = (int16_t*)malloc(samples*sizeof(*samples_));
+  obtained.sample_rate = obtained_format.freq;
+  obtained.num_channels = obtained_format.channels;
+  obtained.num_samples = obtained_format.samples;
+  obtained.sample_size = GetSampleSize(obtained_format.format);
 
+  playback_settings_ = obtained;
+
+  samples_ = (int16_t*)malloc(obtained.num_samples*sizeof(*samples_));
+}
+
+void SDLOut::DoStart() {
   SDL_PauseAudio(0);
 }
 
 void SDLOut::DoStop() {
   SDL_CloseAudio();
   free(samples_);
+}
+
+Uint16 SDLOut::GetSDLFormat(int sample_size) {
+  if (sample_size == 8) {
+    return AUDIO_S8;
+  } else if (sample_size == 16) {
+    return AUDIO_S16SYS;
+  }
+  return AUDIO_S8;
+}
+
+int SDLOut::GetSampleSize(Uint16 sdl_format) {
+  if (sdl_format == AUDIO_S8) {
+    return 8;
+  } else if (sdl_format == AUDIO_S16SYS) {
+    return 16;
+  }
+  return 8;
 }
 
 void SDLOut::FillBuffer(Uint8* output_buffer, int buffer_size) {

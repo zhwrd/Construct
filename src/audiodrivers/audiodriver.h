@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <cstdlib>
+#include <iostream>
 
 namespace construct {
 namespace audiodrivers {
@@ -27,15 +28,21 @@ class AudioDriver {
   AudioDriver();
   virtual ~AudioDriver();
 
+  virtual void Open(AudioDriverSettings& requested,
+                    AudioDriverSettings& obtained) {
+    playback_settings_ = obtained;
+  }
   void Start() { DoStart(); }
   void Stop() { DoStop(); }
 
-  void setPlaybackSettings(const AudioDriverSettings& settings) {
+  /*
+  void set_playback_settings(const AudioDriverSettings& settings) {
     playback_settings_ = settings;
   }
-  const AudioDriverSettings& getPlaybackSettings() const { 
+  const AudioDriverSettings& get_playback_settings() const { 
     return playback_settings_;
   }
+  */
   void set_callback(AudioWorkCallback callback, void* context) {
     callback_ = callback;
     callback_context_ = context;
@@ -53,8 +60,9 @@ class AudioDriver {
   void Quantize16Stereo(const double* source, int16_t* destination,
                         uint32_t num_samples);
 
- private:
   AudioDriverSettings playback_settings_;
+
+ private:
   AudioWorkCallback callback_;
   void* callback_context_;
 
