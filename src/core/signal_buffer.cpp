@@ -1,20 +1,20 @@
-#include "audio_buffer.h"
+#include "signal_buffer.h"
 #include <utility/dsp.h>
 #include <cstdlib>
 
 namespace construct {
 namespace core {
 
-AudioBuffer::AudioBuffer(int num_samples, int num_channels)
+SignalBuffer::SignalBuffer(int num_samples, int num_channels)
   : num_samples_(num_samples), num_channels_(num_channels) {
   buffer_ = (double*)malloc(num_samples_*num_channels_*sizeof(*buffer_));
 }
 
-AudioBuffer::~AudioBuffer() {
+SignalBuffer::~SignalBuffer() {
   free(buffer_);
 }
 
-void AudioBuffer::Clear() {
+void SignalBuffer::Clear() {
   utility::dsp::Clear(buffer_, num_samples_*num_channels_);
 }
 

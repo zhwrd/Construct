@@ -1,13 +1,13 @@
-#ifndef CONSTRUCT_CORE_AUDIO_BUFFER_H_
-#define CONSTRUCT_CORE_AUDIO_BUFFER_H_
+#ifndef CONSTRUCT_CORE_SIGNAL_BUFFER_H_
+#define CONSTRUCT_CORE_SIGNAL_BUFFER_H_
 
 namespace construct {
 namespace core {
 
-class AudioBuffer {
+class SignalBuffer {
  public:
-  AudioBuffer(int num_samples, int num_channels);
-  ~AudioBuffer();
+  SignalBuffer(int num_samples, int num_channels);
+  ~SignalBuffer();
 
  void Clear();
 
