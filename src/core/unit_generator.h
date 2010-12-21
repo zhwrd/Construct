@@ -11,8 +11,8 @@ class UnitGenerator {
   UnitGenerator();
   virtual ~UnitGenerator();
 
-  uint32_t get_num_inputsockets() const { return num_inputsockets_; }
-  uint32_t get_num_outputsockets() const { return num_outputsockets_; }
+  uint32_t num_inputsockets() const { return num_inputsockets_; }
+  uint32_t num_outputsockets() const { return num_outputsockets_; }
 
  protected:
   uint32_t num_inputsockets_;

@@ -9,6 +9,7 @@ namespace construct {
 namespace audiodrivers {
 
 typedef double* (*AudioWorkCallback) (void* context, int num_samples);
+int const kMaxWorkSamples = 65536;
 
 struct AudioDriverSettings {
   AudioDriverSettings() {
@@ -28,32 +29,29 @@ class AudioDriver {
   AudioDriver();
   virtual ~AudioDriver();
 
-  virtual void Open(AudioDriverSettings& requested,
-                    AudioDriverSettings& obtained) {
-    playback_settings_ = obtained;
-  }
-  void Start() { DoStart(); }
-  void Stop() { DoStop(); }
+  virtual bool Open() = 0;
+  virtual void Close() = 0;
+  virtual bool Start() = 0;
+  virtual void Stop() = 0;
 
-  /*
-  void set_playback_settings(const AudioDriverSettings& settings) {
-    playback_settings_ = settings;
-  }
-  const AudioDriverSettings& get_playback_settings() const { 
-    return playback_settings_;
-  }
-  */
-  void set_callback(AudioWorkCallback callback, void* context) {
+  virtual void set_callback(AudioWorkCallback callback, void* context) {
     callback_ = callback;
     callback_context_ = context;
   }
+  virtual void set_playback_settings(const AudioDriverSettings& settings) {
+    playback_settings_ = settings;
+  }
+  const AudioDriverSettings& playback_settings() const { 
+    return playback_settings_;
+  }
+
+  virtual bool opened() { return opened_; }
+  virtual bool started() { return started_; }
  
  protected:
   double* callback(int num_samples) { 
     return callback_(callback_context_, num_samples);
   }
-  virtual void DoStart();
-  virtual void DoStop();
 
   void Quantize16Mono(const double* source, int16_t* destination,
                       uint32_t num_samples);
@@ -61,6 +59,8 @@ class AudioDriver {
                         uint32_t num_samples);
 
   AudioDriverSettings playback_settings_;
+  bool opened_;
+  bool started_;
 
  private:
   AudioWorkCallback callback_;

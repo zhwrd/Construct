@@ -13,14 +13,16 @@ class SDLOut : public AudioDriver {
   SDLOut();
   virtual ~SDLOut();
 
-  virtual void Open(AudioDriverSettings& requested,
-                    AudioDriverSettings& obtained);
+  virtual bool Open();
+  virtual void Close();
+  virtual bool Start();
+  virtual void Stop();
+
+  virtual void set_playback_settings(const AudioDriverSettings& settings);
  
  protected:
-  virtual void DoStart();
-  virtual void DoStop();
-  virtual Uint16 GetSDLFormat(int sample_size);
-  virtual int GetSampleSize(Uint16 sdl_format);
+  static Uint16 ToSDLFormat(int sample_size);
+  static int ToSampleSize(Uint16 sdl_format);
 
  private:
   void FillBuffer(Uint8* output_buffer, int buffer_size);

@@ -3,18 +3,11 @@
 namespace construct {
 namespace audiodrivers {
 
-AudioDriver::AudioDriver() : callback_(NULL), callback_context_(NULL) {
+AudioDriver::AudioDriver() :  callback_(NULL), callback_context_(NULL),
+                              opened_(false), started_(false) {
 }
 
 AudioDriver::~AudioDriver() {
-
-}
-
-void AudioDriver::DoStart() {
-
-}
-
-void AudioDriver::DoStop() {
 
 }
 

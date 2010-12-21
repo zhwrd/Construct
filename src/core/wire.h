@@ -21,7 +21,7 @@ class Wire {
   virtual void SetVolume(double volume);
   virtual void SetPan(double pan);
 
-  virtual inline SignalBuffer* get_buffer() { return buffer_; }
+  virtual inline SignalBuffer* buffer() { return buffer_; }
   virtual inline void set_buffer(SignalBuffer* buffer) { buffer_ = buffer; }
 
  protected:

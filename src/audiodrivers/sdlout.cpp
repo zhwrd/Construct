@@ -8,44 +8,77 @@ SDLOut::SDLOut() : AudioDriver() {
 }
 
 SDLOut::~SDLOut() {
-  DoStop();
+  Close();
 }
 
-void SDLOut::Open(AudioDriverSettings& requested,
-                  AudioDriverSettings& obtained) {
+bool SDLOut::Open() {
+  if (opened()) {
+    Close();
+  }
+  AudioDriverSettings requested = playback_settings_;
+  AudioDriverSettings obtained;
   SDL_AudioSpec desired_format;
   SDL_AudioSpec obtained_format;
   desired_format.freq = requested.sample_rate;
-  desired_format.format = GetSDLFormat(requested.sample_size);
+  desired_format.format = ToSDLFormat(requested.sample_size);
   desired_format.channels = requested.num_channels;
   desired_format.samples = requested.num_samples;
   desired_format.callback = Process;
   desired_format.userdata = this;
 
   if (SDL_OpenAudio(&desired_format, &obtained_format) < 0) {
-    exit(1);
+    return false;
   }
 
   obtained.sample_rate = obtained_format.freq;
   obtained.num_channels = obtained_format.channels;
   obtained.num_samples = obtained_format.samples;
-  obtained.sample_size = GetSampleSize(obtained_format.format);
+  obtained.sample_size = ToSampleSize(obtained_format.format);
 
   playback_settings_ = obtained;
-
   samples_ = (int16_t*)malloc(obtained.num_samples*sizeof(*samples_));
+  opened_ = true;
+  return opened_;
 }
 
-void SDLOut::DoStart() {
-  SDL_PauseAudio(0);
+void SDLOut::Close() {
+  if (opened()) {
+    Stop();
+    SDL_CloseAudio();
+    free(samples_);
+    opened_ = false;
+  }
 }
 
-void SDLOut::DoStop() {
-  SDL_CloseAudio();
-  free(samples_);
+bool SDLOut::Start() {
+  if (opened()) {
+    SDL_PauseAudio(0);
+    started_ = true;
+  }
+  return started_;
 }
 
-Uint16 SDLOut::GetSDLFormat(int sample_size) {
+void SDLOut::Stop() {
+  if (started()) {
+    SDL_PauseAudio(1);
+    started_ = false;
+  }
+}
+
+void SDLOut::set_playback_settings(const AudioDriverSettings& settings) {
+  bool was_opened = opened();
+  bool was_started = started();
+  Close();
+  playback_settings_ = settings;
+  if (was_opened) {
+    Open();
+    if (was_started) {
+      Start();
+    }
+  }
+}
+
+Uint16 SDLOut::ToSDLFormat(int sample_size) {  
   if (sample_size == 8) {
     return AUDIO_S8;
   } else if (sample_size == 16) {
@@ -54,7 +87,7 @@ Uint16 SDLOut::GetSDLFormat(int sample_size) {
   return AUDIO_S8;
 }
 
-int SDLOut::GetSampleSize(Uint16 sdl_format) {
+int SDLOut::ToSampleSize(Uint16 sdl_format) {
   if (sdl_format == AUDIO_S8) {
     return 8;
   } else if (sdl_format == AUDIO_S16SYS) {

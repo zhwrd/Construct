@@ -13,9 +13,9 @@ class SignalBuffer {
 
   void Clear();
 
-  double* get_buffer() const { return buffer_; }
-  uint32_t get_num_samples() const { return num_samples_; }
-  uint32_t get_num_channels() const { return num_channels_; }
+  double* buffer() const { return buffer_; }
+  uint32_t num_samples() const { return num_samples_; }
+  uint32_t num_channels() const { return num_channels_; }
  
  private:
   double* buffer_;

@@ -20,16 +20,16 @@ class SignalSocket {
   virtual void Connect(Wire* wire);
   virtual void Disconnect(Wire* wire);
   
-  virtual inline UnitGenerator& get_unitgenerator() const { 
+  virtual inline UnitGenerator& unitgenerator() const { 
     return unitgenerator_;
   }
-  virtual inline SignalBuffer* get_signalbuffer() const { 
+  virtual inline SignalBuffer* signalbuffer() const { 
     return signalbuffer_;
   }
   virtual inline void set_signalbuffer(SignalBuffer* signalbuffer) { 
     signalbuffer_ = signalbuffer;
   }
-  virtual inline const std::string& get_name() const { return name_; }
+  virtual inline const std::string& name() const { return name_; }
   virtual inline void set_name(const std::string& name) { name_ = name; }
 
  protected:

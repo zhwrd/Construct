@@ -4,5 +4,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 add_library(core  signal_buffer.h signal_buffer.cpp
                   signal_socket.h signal_socket.cpp
                   wire.h wire.cpp
+                  player.h player.cpp
                   unit_generator.h
                   )

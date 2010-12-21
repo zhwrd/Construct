@@ -65,7 +65,9 @@ void initialize_audio() {
   settings.num_channels = 1;
   audio_out = new SDLOut();
   audio_out->set_callback(synth, NULL);
-  audio_out->Open(settings, settings);
+  audio_out->set_playback_settings(settings);
+  audio_out->Open();
+  settings = audio_out->playback_settings();
   g_waveout = (double*)malloc(settings.num_samples*sizeof(*g_waveout));
 }
 
