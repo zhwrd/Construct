@@ -5,7 +5,7 @@
 namespace construct {
 namespace core {
 
-SignalBuffer::SignalBuffer(int num_samples, int num_channels)
+SignalBuffer::SignalBuffer(uint32_t num_samples, uint32_t num_channels)
   : num_samples_(num_samples), num_channels_(num_channels) {
   buffer_ = (double*)malloc(num_samples_*num_channels_*sizeof(*buffer_));
 }

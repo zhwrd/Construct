@@ -1,6 +1,8 @@
 #ifndef CONSTRUCT_CORE_WIRE_H_
 #define CONSTRUCT_CORE_WIRE_H_
 
+#include <stdint.h>
+
 namespace construct {
 namespace core {
 
@@ -15,7 +17,7 @@ class Wire {
   virtual void Connect(SignalSocket* source, SignalSocket* destination);
   virtual void ChangeSource(SignalSocket* source);
   virtual void ChangeDestination(SignalSocket* destination);
-  virtual void CollectData(int num_samples);
+  virtual void CollectData(uint32_t num_samples);
   virtual void SetVolume(double volume);
   virtual void SetPan(double pan);
 

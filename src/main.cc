@@ -7,17 +7,16 @@
 #include "config.h"
 
 #include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
 #include <SDL/SDL_audio.h>
-
-//#include <OpenGL/gl.h>
-//#include <OpenGL/glu.h>
+#include <SDL/SDL_opengl.h>
+#include <audiodrivers/sdlout.h>
 
 // Audio
 int sample_size = 16;
 int sample_rate = 44100;
 double freq = 440.0;
 double* g_waveform = NULL;
+double* g_waveout = NULL;
 int g_length = 0;
 int position = 0;
 
@@ -25,7 +24,7 @@ int position = 0;
 int width = 100;
 int height = 100;
 
-void mixaudio(void* unused, Uint8* stream, int length);
+double* synth(void* context, int num_samples);
 void initialize_video();
 void initialize_audio();
 void initialize_sdl();
@@ -38,37 +37,24 @@ int main(int argc, char* argv[]) {
   for (int i = 0; i < g_length; ++i) {
     g_waveform[i] = sin(omega*i);
   }
+  g_waveout = (double*)malloc(940*sizeof(*g_waveout));
   initialize_sdl();
+
+  construct::audiodrivers::SDLOut out;
+  out.set_callback(synth, NULL);
+  out.Start();
+
   char c = getchar();
   return 0;
 }
 
-void mixaudio(void* unused, Uint8* stream, int length) {
-  for (int i = 0; i < length; i += 2) {
-    int16_t output = (pow(2, 15) - 1)*g_waveform[position];
-    stream[i] = output&0x00FF;
-    stream[i+1] = (output>>8)&0x00FF;
+double* synth(void* context, int num_samples) {
+  for (int i = 0; i < num_samples; ++i) {
+    g_waveout[i] = (pow(2, 15) - 1)*g_waveform[position];
     ++position;
     position %= g_length;
   }
-}
-
-void initialize_audio() {
-  extern void mixaudio(void* unused, Uint8* stream, int length);
-  SDL_AudioSpec desired_format;
-  SDL_AudioSpec obtained_format;
-  desired_format.freq = 44100;
-  desired_format.format = AUDIO_S16SYS;
-  desired_format.channels = 1;
-  desired_format.samples = 512;
-  desired_format.callback = mixaudio;
-  desired_format.userdata = NULL;
-  
-  if (SDL_OpenAudio(&desired_format, &obtained_format) < 0) {
-    exit(1);
-  }
-
-  SDL_PauseAudio(0);
+  return g_waveout;
 }
 
 void initialize_video() {
@@ -105,6 +91,5 @@ void initialize_sdl() {
     exit(1);
   }
   //initialize_video();
-  initialize_audio();
 }
 

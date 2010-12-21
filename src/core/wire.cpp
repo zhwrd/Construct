@@ -34,7 +34,7 @@ void Wire::ChangeDestination(SignalSocket* destination) {
   destination_->Connect(this);
 }
 
-void Wire::CollectData(int num_samples) {
+void Wire::CollectData(uint32_t num_samples) {
   source_->CollectData(num_samples);
 }
 

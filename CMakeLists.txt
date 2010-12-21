@@ -11,7 +11,7 @@ if(CMAKE_HOST_APPLE)
   set(DEP_SRCS "deps/SDLMain.m")
 endif()
 
-include_directories(.)
+include_directories(. src)
 add_subdirectory(src)
 
 add_executable(Construct  src/main.cc
@@ -19,4 +19,6 @@ add_executable(Construct  src/main.cc
 
 target_link_libraries(Construct ${OPENGL_LIBRARIES}
                                 ${SDL_LIBRARY}
-                                core)
+                                core
+                                audiodrivers
+                                )

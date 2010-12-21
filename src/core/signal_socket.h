@@ -2,7 +2,6 @@
 #define CONSTRUCT_CORE_SIGNAL_SOCKET_H_
 
 #include <core/signal_buffer.h>
-#include <core/unit_generator.h>
 #include <core/wire.h>
 #include <string>
 #include <vector>
@@ -10,12 +9,14 @@
 namespace construct {
 namespace core {
 
+class UnitGenerator;
+
 class SignalSocket {
  public:
   SignalSocket(UnitGenerator& unitgenerator, std::string name);
   virtual ~SignalSocket();
 
-  virtual void CollectData(int /* num_samples */) {}
+  virtual void CollectData(uint32_t /* num_samples */) {}
   virtual void Connect(Wire* wire);
   virtual void Disconnect(Wire* wire);
   
@@ -41,12 +42,12 @@ class SignalSocket {
 
 class InputSocket : public SignalSocket {
  public:
-  virtual void CollectData(int num_samples);  
+  virtual void CollectData(uint32_t num_samples);  
 };
 
 class OutputSocket : public SignalSocket {
  public:
-  virtual void CollectData(int num_samples);  
+  virtual void CollectData(uint32_t num_samples);  
 };
 
 } // namespace core
