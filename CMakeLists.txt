@@ -7,14 +7,16 @@ find_package(OpenGL REQUIRED)
 
 include(cmake/configure.cmake)
 
-include_directories(.)
-
 if(CMAKE_HOST_APPLE)
   set(DEP_SRCS "deps/SDLMain.m")
 endif()
+
+include_directories(.)
+add_subdirectory(src)
 
 add_executable(Construct  src/main.cc
                           ${DEP_SRCS})
 
 target_link_libraries(Construct ${OPENGL_LIBRARIES}
-                                ${SDL_LIBRARY})
+                                ${SDL_LIBRARY}
+                                core)

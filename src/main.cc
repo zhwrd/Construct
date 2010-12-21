@@ -21,10 +21,27 @@ double* g_waveform = NULL;
 int g_length = 0;
 int position = 0;
 
-
 // Video
 int width = 100;
 int height = 100;
+
+void mixaudio(void* unused, Uint8* stream, int length);
+void initialize_video();
+void initialize_audio();
+void initialize_sdl();
+
+int main(int argc, char* argv[]) {
+  double length = sample_rate/freq;
+  double omega = 3.14159*2/length;
+  g_length = (int)length;
+  g_waveform = (double*)malloc(g_length*sizeof(double));
+  for (int i = 0; i < g_length; ++i) {
+    g_waveform[i] = sin(omega*i);
+  }
+  initialize_sdl();
+  char c = getchar();
+  return 0;
+}
 
 void mixaudio(void* unused, Uint8* stream, int length) {
   for (int i = 0; i < length; i += 2) {
@@ -34,6 +51,24 @@ void mixaudio(void* unused, Uint8* stream, int length) {
     ++position;
     position %= g_length;
   }
+}
+
+void initialize_audio() {
+  extern void mixaudio(void* unused, Uint8* stream, int length);
+  SDL_AudioSpec desired_format;
+  SDL_AudioSpec obtained_format;
+  desired_format.freq = 44100;
+  desired_format.format = AUDIO_S16SYS;
+  desired_format.channels = 1;
+  desired_format.samples = 512;
+  desired_format.callback = mixaudio;
+  desired_format.userdata = NULL;
+  
+  if (SDL_OpenAudio(&desired_format, &obtained_format) < 0) {
+    exit(1);
+  }
+
+  SDL_PauseAudio(0);
 }
 
 void initialize_video() {
@@ -65,24 +100,6 @@ void initialize_video() {
   glLoadIdentity();
 }
 
-void initialize_audio() {
-  extern void mixaudio(void* unused, Uint8* stream, int length);
-  SDL_AudioSpec desired_format;
-  SDL_AudioSpec obtained_format;
-  desired_format.freq = 44100;
-  desired_format.format = AUDIO_S16SYS;
-  desired_format.channels = 1;
-  desired_format.samples = 512;
-  desired_format.callback = mixaudio;
-  desired_format.userdata = NULL;
-  
-  if (SDL_OpenAudio(&desired_format, &obtained_format) < 0) {
-    exit(1);
-  }
-
-  SDL_PauseAudio(0);
-}
-
 void initialize_sdl() {
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     exit(1);
@@ -91,15 +108,3 @@ void initialize_sdl() {
   initialize_audio();
 }
 
-int main(int argc, char* argv[]) {
-  double length = sample_rate/freq;
-  double omega = 3.14159*2/length;
-  g_length = (int)length;
-  g_waveform = (double*)malloc(g_length*sizeof(double));
-  for (int i = 0; i < g_length; ++i) {
-    g_waveform[i] = sin(omega*i);
-  }
-  initialize_sdl();
-  char c = getchar();
-  return 0;
-}
