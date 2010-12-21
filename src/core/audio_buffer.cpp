@@ -1,4 +1,5 @@
 #include "audio_buffer.h"
+#include <utility/dsp.h>
 #include <cstdlib>
 
 namespace construct {
@@ -14,9 +15,7 @@ AudioBuffer::~AudioBuffer() {
 }
 
 void AudioBuffer::Clear() {
-  for (int i = 0; i < num_samples_*num_channels_; ++i) {
-    buffer_[i] = 0;
-  }
+  utility::dsp::Clear(buffer_, num_samples_*num_channels_);
 }
 
 } // namespace core
