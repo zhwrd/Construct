@@ -9,66 +9,35 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_audio.h>
 #include <SDL/SDL_opengl.h>
-#include <audiodrivers/sdlout.h>
 
-// Audio
-construct::audiodrivers::SDLOut* audio_out;
-construct::audiodrivers::AudioDriverSettings settings;
-int sample_size = 16;
-int sample_rate = 44100;
-double freq = 440.0;
-double* g_waveform = NULL;
-double* g_waveout = NULL;
-int g_length = 0;
-int position = 0;
+#include <core/player.h>
+#include <audiodrivers/sdlout.h>
 
 // Video
 int width = 100;
 int height = 100;
 
-double* synth(void* context, int num_samples);
 void initialize_video();
-void initialize_audio();
 void initialize_sdl();
-void create_wavetable();
-
-double* synth(void* context, int num_samples) {
-  for (int i = 0; i < num_samples; ++i) {
-    g_waveout[i] = (pow(2, 15) - 1)*g_waveform[position];
-    ++position;
-    position %= g_length;
-  }
-  return g_waveout;
-}
 
 int main(int argc, char* argv[]) {
   initialize_sdl();
-  initialize_audio();
-  create_wavetable();
-  audio_out->Start();
+
+  // Audio
+  construct::core::Player player;
+  construct::audiodrivers::SDLOut audio_out;
+  construct::audiodrivers::AudioDriverSettings settings;
+  settings.num_channels = 1;
+  audio_out.set_playback_settings(settings);
+  audio_out.Open();
+
+  player.set_driver(audio_out);
+  player.Initialize();
+  std::cout << "Initialized" << std::endl;
+  audio_out.Start();
+
   char c = getchar();
   return 0;
-}
-
-void create_wavetable() {
-  double length = settings.sample_rate/freq;
-  double omega = 3.14159*2/length;
-  g_length = (int)length;
-  g_waveform = (double*)malloc(g_length*sizeof(double));
-  for (int i = 0; i < g_length; ++i) {
-    g_waveform[i] = sin(omega*i);
-  }
-}
-
-void initialize_audio() {
-  using namespace construct::audiodrivers;
-  settings.num_channels = 1;
-  audio_out = new SDLOut();
-  audio_out->set_callback(synth, NULL);
-  audio_out->set_playback_settings(settings);
-  audio_out->Open();
-  settings = audio_out->playback_settings();
-  g_waveout = (double*)malloc(settings.num_samples*sizeof(*g_waveout));
 }
 
 void initialize_video() {

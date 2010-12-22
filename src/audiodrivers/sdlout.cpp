@@ -71,8 +71,10 @@ void SDLOut::set_playback_settings(const AudioDriverSettings& settings) {
   Close();
   playback_settings_ = settings;
   if (was_opened) {
+    std::cout << "sdlout wasopened" << std::endl;
     Open();
     if (was_started) {
+      std::cout << "sdlout wasstarted" << std::endl;
       Start();
     }
   }

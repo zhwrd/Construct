@@ -24,6 +24,9 @@ void SignalSocket::Disconnect(Wire* wire) {
 
 // InputSocket
 
+InputSocket::InputSocket(UnitGenerator& unitgenerator, std::string name)
+  : SignalSocket(unitgenerator, name) {}
+
 void InputSocket::CollectData(uint32_t num_samples) {
   for ( std::vector<Wire*>::iterator i = wires_.begin();
         i != wires_.end();
@@ -33,6 +36,9 @@ void InputSocket::CollectData(uint32_t num_samples) {
 }
 
 // OutputSocket
+
+OutputSocket::OutputSocket(UnitGenerator& unitgenerator, std::string name)
+  : SignalSocket(unitgenerator, name) {}
 
 void OutputSocket::CollectData(uint32_t /* num_samples */) {
   // Does nothing
