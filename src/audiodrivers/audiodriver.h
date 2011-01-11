@@ -10,6 +10,7 @@ namespace audiodrivers {
 
 typedef double* (*AudioWorkCallback) (void* context, int num_samples);
 int const kMaxWorkSamples = 65536;
+int const kMax16Amplitude = 32767;
 
 struct AudioDriverSettings {
   AudioDriverSettings() {
@@ -18,10 +19,10 @@ struct AudioDriverSettings {
     num_channels = 2;
     num_samples = 512;
   }
-  uint32_t sample_rate;
-  uint32_t sample_size;
-  uint32_t num_channels;
-  uint32_t num_samples;
+  int sample_rate;
+  int sample_size;
+  int num_channels;
+  int num_samples;
 };
 
 class AudioDriver {
@@ -54,9 +55,9 @@ class AudioDriver {
   }
 
   void Quantize16Mono(const double* source, int16_t* destination,
-                      uint32_t num_samples);
+                      int num_samples);
   void Quantize16Stereo(const double* source, int16_t* destination,
-                        uint32_t num_samples);
+                        int num_samples);
 
   AudioDriverSettings playback_settings_;
   bool opened_;

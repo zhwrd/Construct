@@ -1,6 +1,9 @@
 #include "signal_socket.h"
 #include <algorithm>
 #include <cassert>
+#include <core/unit_generator.h>
+#include <iostream>
+#include <cstring>
 
 namespace construct {
 namespace core {
@@ -27,11 +30,16 @@ void SignalSocket::Disconnect(Wire* wire) {
 InputSocket::InputSocket(UnitGenerator& unitgenerator, std::string name)
   : SignalSocket(unitgenerator, name) {}
 
-void InputSocket::CollectData(uint32_t num_samples) {
+void InputSocket::CollectData(int num_samples) {
+  //assert(num_samples >= 0);
   for ( std::vector<Wire*>::iterator i = wires_.begin();
         i != wires_.end();
         ++i) {
-    (*i)->CollectData(num_samples);
+    Wire* wire = *i;
+    wire->CollectData(num_samples);
+    memmove(signalbuffer_->buffer(),
+            wire->buffer()->buffer(),
+            num_samples*sizeof(*signalbuffer_->buffer()));
   }
 }
 
@@ -40,8 +48,8 @@ void InputSocket::CollectData(uint32_t num_samples) {
 OutputSocket::OutputSocket(UnitGenerator& unitgenerator, std::string name)
   : SignalSocket(unitgenerator, name) {}
 
-void OutputSocket::CollectData(uint32_t /* num_samples */) {
-  // Does nothing
+void OutputSocket::CollectData(int num_samples) {
+  unitgenerator_.GenerateSignal(num_samples);
 }
 
 } // namespace core

@@ -1,6 +1,7 @@
 #include "player.h"
-#include <audiodrivers/audiodriver.h>
 #include <cmath>
+#include <audiodrivers/audiodriver.h>
+#include <core/wire.h>
 
 namespace construct {
 namespace core {
@@ -17,27 +18,44 @@ Player::~Player() {
 void Player::Initialize() {
   int num_samples = driver_->playback_settings().num_samples;
   int sample_rate = driver_->playback_settings().sample_rate;
+  
+  // make envelope shape
+  int shape_length = 10*44100;
+  SignalBuffer* shape = new SignalBuffer(shape_length, 1);
+  for (int i = 0; i < shape_length; ++i) {
+    shape->buffer()[i] = (i / (10*44100.0))*0.25;
+  }
+  // init envelope
+  envelope.Shape().set_signalbuffer(shape);
+  envelope.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+
   // make wavetable
-  double length = sample_rate/440.0;
+  double length = sample_rate/20;
   double omega = 3.14159*2/length;
-  int wavetable_size = (int)length;
-  SignalBuffer* wavetable = new SignalBuffer(wavetable_size, 1); 
-  for (int i = 0; i < wavetable_size; ++i) {
+  int wavetable_length = (int)length;
+  SignalBuffer* wavetable = new SignalBuffer(wavetable_length, 1); 
+  for (int i = 0; i < wavetable_length; ++i) {
     wavetable->buffer()[i] = sin(omega*i);
   }
 
-  // make other buffers
+  // make frequency and amplitude buffers for oscillator
   SignalBuffer* frequency = new SignalBuffer(num_samples, 1);
   SignalBuffer* amplitude = new SignalBuffer(num_samples, 1);
   for (int i = 0; i < num_samples; ++i) {
-    frequency->buffer()[i] = 440;
-    amplitude->buffer()[i] = 0.1*(pow(2, 15-1)-1);
+    frequency->buffer()[i] = 440.0;
+    amplitude->buffer()[i] = 0.0;
+    //amplitude->buffer()[i] = 0.1;
   }
 
   oscillator.Amplitude().set_signalbuffer(amplitude);
   oscillator.Frequency().set_signalbuffer(frequency);
   oscillator.Wavetable().set_signalbuffer(wavetable);
   oscillator.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  
+  // connect envelope to amplitude
+  Wire* wire = new Wire();
+  wire->set_buffer(new SignalBuffer(num_samples, 1));
+  wire->Connect(&envelope.Output(), &oscillator.Amplitude());
 }
 
 double* Player::AudioWork(void* context, int num_samples) {
@@ -45,7 +63,7 @@ double* Player::AudioWork(void* context, int num_samples) {
 }
 
 double* Player::AudioWork(int num_samples) {
-  oscillator.GenerateAudio(num_samples);
+  oscillator.GenerateSignal(num_samples);
   return oscillator.Output().signalbuffer()->buffer();
 }
 

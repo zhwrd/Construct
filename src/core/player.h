@@ -2,6 +2,7 @@
 #define CONSTRUCT_CORE_PLAYER_H_
 
 #include <core/oscillator.h>
+#include <core/envelope.h>
 
 namespace construct {
 
@@ -29,6 +30,7 @@ class Player {
   double* buffer_;
 
   Oscillator oscillator;
+  Envelope envelope;
 
 };
 

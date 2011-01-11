@@ -1,6 +1,8 @@
 #include "wire.h"
 #include <core/signal_socket.h>
 #include <cassert>
+#include <cstring>
+#include <iostream>
 
 namespace construct {
 namespace core {
@@ -34,8 +36,13 @@ void Wire::ChangeDestination(SignalSocket* destination) {
   destination_->Connect(this);
 }
 
-void Wire::CollectData(uint32_t num_samples) {
+void Wire::CollectData(int num_samples) {
+  //assert(num_samples >= 0);
   source_->CollectData(num_samples);
+  memmove(buffer_->buffer(),
+          source_->signalbuffer()->buffer(),
+          num_samples*sizeof(*buffer_->buffer()));
+  // TODO: mixing
 }
 
 void Wire::SetVolume(double volume) {

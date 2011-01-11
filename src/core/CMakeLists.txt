@@ -6,5 +6,7 @@ add_library(core  signal_buffer.h signal_buffer.cpp
                   wire.h wire.cpp
                   player.h player.cpp
                   unit_generator.h unit_generator.cpp
+                  step_generator.h
                   oscillator.h oscillator.cpp
+                  envelope.h envelope.cpp
                   )

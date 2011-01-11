@@ -8,19 +8,19 @@ namespace core {
 
 class SignalBuffer {
  public:
-  SignalBuffer(uint32_t num_samples, uint32_t num_channels);
+  SignalBuffer(int num_samples, int num_channels);
   ~SignalBuffer();
 
   void Clear();
 
   double* buffer() const { return buffer_; }
-  uint32_t num_samples() const { return num_samples_; }
-  uint32_t num_channels() const { return num_channels_; }
+  int num_samples() const { return num_samples_; }
+  int num_channels() const { return num_channels_; }
  
  private:
   double* buffer_;
-  uint32_t num_samples_;
-  uint32_t num_channels_;
+  int num_samples_;
+  int num_channels_;
 };
 
 } // namespace core

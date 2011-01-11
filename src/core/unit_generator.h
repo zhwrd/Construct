@@ -11,18 +11,18 @@ class UnitGenerator {
   UnitGenerator();
   virtual ~UnitGenerator();
 
-  virtual void GenerateAudio(int num_samples) = 0;
-
-  SignalSocket& GetInputSocket(OutputSocket::id_type id);
+  virtual void GenerateSignal(int num_samples);
+  
+  inline SignalSocket& Output() { return *outputsockets_[0]; }
+  SignalSocket& GetInputSocket(InputSocket::id_type id);
   SignalSocket& GetOutputSocket(OutputSocket::id_type id);
-  uint32_t num_inputsockets() const { return inputsockets_.size(); }
-  uint32_t num_outputsockets() const { return outputsockets_.size(); }
+  inline int num_inputsockets() const { return inputsockets_.size(); }
+  inline int num_outputsockets() const { return outputsockets_.size(); }
 
  protected:
-  virtual void InitializeSockets() {}
-
   std::vector<InputSocket*> inputsockets_;
   std::vector<OutputSocket*> outputsockets_;
+
 };
 
 } // namespace core

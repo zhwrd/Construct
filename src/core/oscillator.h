@@ -11,17 +11,14 @@ class Oscillator : public UnitGenerator {
   Oscillator();
   virtual ~Oscillator() {}
 
-  virtual void GenerateAudio(int num_samples);
+  virtual void GenerateSignal(int num_samples);
   
   inline SignalSocket& Amplitude() { return *inputsockets_[0]; }
   inline SignalSocket& Frequency() { return *inputsockets_[1]; }
   inline SignalSocket& Wavetable() { return *inputsockets_[2]; }
 
-  inline SignalSocket& Output() { return *outputsockets_[0]; }
-
  protected:
-  virtual void InitializeSockets();
-  uint32_t wavetable_position_;
+  int wavetable_position_;
 
 };
 

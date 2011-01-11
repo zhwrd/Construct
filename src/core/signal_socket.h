@@ -16,7 +16,7 @@ class SignalSocket {
   SignalSocket(UnitGenerator& unitgenerator, std::string name);
   virtual ~SignalSocket();
 
-  virtual void CollectData(uint32_t /* num_samples */) {}
+  virtual void CollectData(int /* num_samples */) {}
   virtual void Connect(Wire* wire);
   virtual void Disconnect(Wire* wire);
   
@@ -42,16 +42,16 @@ class SignalSocket {
 
 class InputSocket : public SignalSocket {
  public:
-  typedef uint32_t id_type;
+  typedef int id_type;
   InputSocket(UnitGenerator& unitgenerator, std::string name);
-  virtual void CollectData(uint32_t num_samples);  
+  virtual void CollectData(int num_samples);  
 };
 
 class OutputSocket : public SignalSocket {
  public:
-  typedef uint32_t id_type;
+  typedef int id_type;
   OutputSocket(UnitGenerator& unitgenerator, std::string name);
-  virtual void CollectData(uint32_t num_samples);  
+  virtual void CollectData(int num_samples);  
 };
 
 } // namespace core

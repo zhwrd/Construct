@@ -13,19 +13,19 @@ AudioDriver::~AudioDriver() {
 
 void AudioDriver::Quantize16Mono( const double* source,
                                   int16_t* destination,
-                                  uint32_t num_samples) {
+                                  int num_samples) {
   do {
-    *destination++ = source[0];
+    *destination++ = source[0]*kMax16Amplitude;
     ++source;
   } while (--num_samples);
 }
 
 void AudioDriver::Quantize16Stereo( const double* source,
                                     int16_t* destination,
-                                    uint32_t num_samples) {
+                                    int num_samples) {
   do {
-    *destination++ = source[0];
-    *destination++ = source[1];
+    *destination++ = source[0]*kMax16Amplitude;
+    *destination++ = source[1]*kMax16Amplitude;
     source += 2;
   } while (--num_samples);
 }

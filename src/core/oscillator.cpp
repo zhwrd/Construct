@@ -1,30 +1,31 @@
 #include "oscillator.h"
+#include <iostream>
 #include <cstdlib>
+#include <cassert>
 
 namespace construct {
 namespace core {
 
 Oscillator::Oscillator() :  wavetable_position_(0) {
-  InitializeSockets();
-}
-
-void Oscillator::GenerateAudio(int num_samples) {
-  double* amplitude = Amplitude().signalbuffer()->buffer();
-  double* frequency = Frequency().signalbuffer()->buffer();
-  double* wavetable = Wavetable().signalbuffer()->buffer();
-  for (int i = 0; i < num_samples; ++i) {
-    double output = amplitude[i]*wavetable[wavetable_position_];
-    Output().signalbuffer()->buffer()[i] = output;
-    ++wavetable_position_;
-    wavetable_position_ %= Wavetable().signalbuffer()->num_samples();
-  }
-}
-
-void Oscillator::InitializeSockets() {
   inputsockets_.push_back(new InputSocket(*this, "Amplitude"));
   inputsockets_.push_back(new InputSocket(*this, "Frequency"));
   inputsockets_.push_back(new InputSocket(*this, "Wavetable"));
-  outputsockets_.push_back(new OutputSocket(*this, "Output"));
+}
+
+void Oscillator::GenerateSignal(int num_samples) {
+  //assert(num_samples >= 0);
+  Amplitude().CollectData(num_samples);
+  double* amplitude = Amplitude().signalbuffer()->buffer();
+  double* frequency = Frequency().signalbuffer()->buffer();
+  double* wavetable = Wavetable().signalbuffer()->buffer();
+  int wavetable_length = Wavetable().signalbuffer()->num_samples();
+  for (int i = 0; i < num_samples; ++i) {
+    double output = amplitude[i]*wavetable[wavetable_position_];
+    double increment = (wavetable_length * frequency[i]) / 44100.0;
+    Output().signalbuffer()->buffer()[i] = output;
+    wavetable_position_ += (int)increment;
+    wavetable_position_ %= wavetable_length;
+  }
 }
 
 } // namespace core
