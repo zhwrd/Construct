@@ -1,0 +1,10 @@
+# CMake build files
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+Makefile
+*.a
+
+# Generated configuration files
+config.h
+
