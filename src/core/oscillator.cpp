@@ -13,8 +13,9 @@ Oscillator::Oscillator() :  wavetable_position_(0) {
 }
 
 void Oscillator::GenerateSignal(int num_samples) {
-  //assert(num_samples >= 0);
   Amplitude().CollectData(num_samples);
+  Frequency().CollectData(num_samples);
+  Wavetable().CollectData(num_samples);
   double* amplitude = Amplitude().signalbuffer()->buffer();
   double* frequency = Frequency().signalbuffer()->buffer();
   double* wavetable = Wavetable().signalbuffer()->buffer();

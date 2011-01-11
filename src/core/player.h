@@ -29,8 +29,9 @@ class Player {
   audiodrivers::AudioDriver* driver_;
   double* buffer_;
 
-  Oscillator oscillator;
-  Envelope envelope;
+  Oscillator oscillator_;
+  Envelope amp_envelope_;
+  Envelope freq_envelope_;
 
 };
 

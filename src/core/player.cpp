@@ -19,15 +19,27 @@ void Player::Initialize() {
   int num_samples = driver_->playback_settings().num_samples;
   int sample_rate = driver_->playback_settings().sample_rate;
   
-  // make envelope shape
-  int shape_length = 10*44100;
-  SignalBuffer* shape = new SignalBuffer(shape_length, 1);
+  // make freq_envelope shape
+  int shape_length = 1;
+  SignalBuffer* freq_shape = new SignalBuffer(shape_length, 1);
   for (int i = 0; i < shape_length; ++i) {
-    shape->buffer()[i] = (i / (10*44100.0))*0.25;
+    freq_shape->buffer()[i] = 440.0;
   }
-  // init envelope
-  envelope.Shape().set_signalbuffer(shape);
-  envelope.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  
+  // init freq_envelope
+  freq_envelope_.Shape().set_signalbuffer(freq_shape);
+  freq_envelope_.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  
+  // make amp_envelope shape
+  shape_length = 1;
+  SignalBuffer* amp_shape = new SignalBuffer(shape_length, 1);
+  for (int i = 0; i < shape_length; ++i) {
+    amp_shape->buffer()[i] = 0.25;
+  }
+  
+  // init amp_envelope
+  amp_envelope_.Shape().set_signalbuffer(amp_shape);
+  amp_envelope_.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
 
   // make wavetable
   double length = sample_rate/20;
@@ -38,24 +50,21 @@ void Player::Initialize() {
     wavetable->buffer()[i] = sin(omega*i);
   }
 
-  // make frequency and amplitude buffers for oscillator
-  SignalBuffer* frequency = new SignalBuffer(num_samples, 1);
-  SignalBuffer* amplitude = new SignalBuffer(num_samples, 1);
-  for (int i = 0; i < num_samples; ++i) {
-    frequency->buffer()[i] = 440.0;
-    amplitude->buffer()[i] = 0.0;
-    //amplitude->buffer()[i] = 0.1;
-  }
-
-  oscillator.Amplitude().set_signalbuffer(amplitude);
-  oscillator.Frequency().set_signalbuffer(frequency);
-  oscillator.Wavetable().set_signalbuffer(wavetable);
-  oscillator.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  // init oscillator
+  oscillator_.Amplitude().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  oscillator_.Frequency().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  oscillator_.Wavetable().set_signalbuffer(wavetable);
+  oscillator_.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
   
-  // connect envelope to amplitude
-  Wire* wire = new Wire();
-  wire->set_buffer(new SignalBuffer(num_samples, 1));
-  wire->Connect(&envelope.Output(), &oscillator.Amplitude());
+  // connect amp_envelope to amplitude
+  Wire* amp_wire = new Wire();
+  amp_wire->set_buffer(new SignalBuffer(num_samples, 1));
+  amp_wire->Connect(&amp_envelope_.Output(), &oscillator_.Amplitude());
+  
+  // connect freq_envelope to frequency
+  Wire* freq_wire = new Wire();
+  freq_wire->set_buffer(new SignalBuffer(num_samples, 1));
+  freq_wire->Connect(&freq_envelope_.Output(), &oscillator_.Frequency());
 }
 
 double* Player::AudioWork(void* context, int num_samples) {
@@ -63,8 +72,8 @@ double* Player::AudioWork(void* context, int num_samples) {
 }
 
 double* Player::AudioWork(int num_samples) {
-  oscillator.GenerateSignal(num_samples);
-  return oscillator.Output().signalbuffer()->buffer();
+  oscillator_.Output().CollectData(num_samples);
+  return oscillator_.Output().signalbuffer()->buffer();
 }
 
 void Player::set_driver(audiodrivers::AudioDriver& driver) {
