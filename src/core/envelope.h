@@ -22,16 +22,22 @@ class Envelope : public UnitGenerator {
     assert(duration >= 0.0);
     duration_ = duration;
   }
+  inline void set_repeat(bool repeat) { repeat_ = repeat; }
 
-  inline SignalSocket& Shape() { return *inputsockets_[0]; }
-  double peak_amplitude() { return peak_amplitude_; }
-  double duration() { return duration_; }
+  inline SignalSocket& Shape() const { return *inputsockets_[0]; }
+  double peak_amplitude() const { return peak_amplitude_; }
+  double duration() const { return duration_; }
+  double repeat() const { return repeat_; }
 
 
  private:
   double peak_amplitude_;
   double duration_;
-  int shape_position_;
+  bool repeat_;
+
+  int shape_index_;
+  double shape_position_;
+  double shape_value_;
 
 };
 

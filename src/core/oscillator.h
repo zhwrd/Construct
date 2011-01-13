@@ -18,7 +18,9 @@ class Oscillator : public UnitGenerator {
   inline SignalSocket& Wavetable() { return *inputsockets_[2]; }
 
  protected:
-  int wavetable_position_;
+  int wavetable_index_;
+  double wavetable_position_;
+  double wavetable_value_;
 
 };
 

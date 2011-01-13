@@ -31,7 +31,6 @@ InputSocket::InputSocket(UnitGenerator& unitgenerator, std::string name)
   : SignalSocket(unitgenerator, name) {}
 
 void InputSocket::CollectData(int num_samples) {
-  //assert(num_samples >= 0);
   for ( std::vector<Wire*>::iterator i = wires_.begin();
         i != wires_.end();
         ++i) {

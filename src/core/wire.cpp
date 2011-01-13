@@ -37,7 +37,6 @@ void Wire::ChangeDestination(SignalSocket* destination) {
 }
 
 void Wire::CollectData(int num_samples) {
-  //assert(num_samples >= 0);
   source_->CollectData(num_samples);
   memmove(buffer_->buffer(),
           source_->signalbuffer()->buffer(),

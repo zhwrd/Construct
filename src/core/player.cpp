@@ -20,26 +20,31 @@ void Player::Initialize() {
   int sample_rate = driver_->playback_settings().sample_rate;
   
   // make freq_envelope shape
-  int shape_length = 1;
+  int shape_length = 10;
   SignalBuffer* freq_shape = new SignalBuffer(shape_length, 1);
   for (int i = 0; i < shape_length; ++i) {
-    freq_shape->buffer()[i] = 440.0;
+    freq_shape->buffer()[i] = 440.0 + ((i/10.0) * 440.0);
   }
   
   // init freq_envelope
   freq_envelope_.Shape().set_signalbuffer(freq_shape);
   freq_envelope_.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  freq_envelope_.set_duration(1000);
+  freq_envelope_.set_repeat(true);
   
   // make amp_envelope shape
-  shape_length = 1;
+  shape_length = 10;
   SignalBuffer* amp_shape = new SignalBuffer(shape_length, 1);
   for (int i = 0; i < shape_length; ++i) {
-    amp_shape->buffer()[i] = 0.25;
+    //amp_shape->buffer()[i] = (i / 10.0);
+    amp_shape->buffer()[i] = 1;
   }
   
   // init amp_envelope
   amp_envelope_.Shape().set_signalbuffer(amp_shape);
   amp_envelope_.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  amp_envelope_.set_duration(10000);
+  amp_envelope_.set_peak_amplitude(0.25);
 
   // make wavetable
   double length = sample_rate/20;
