@@ -19,7 +19,6 @@ class Oscillator : public UnitGenerator {
 
  protected:
   int wavetable_index_;
-  double wavetable_position_;
   double wavetable_value_;
 
 };

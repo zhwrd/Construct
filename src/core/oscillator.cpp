@@ -3,12 +3,12 @@
 #include <cstdlib>
 #include <cassert>
 #include <utility/math.h>
+#include <cmath>
 
 namespace construct {
 namespace core {
 
-Oscillator::Oscillator() :  wavetable_position_(0.0),
-                            wavetable_index_(0),
+Oscillator::Oscillator() :  wavetable_index_(0),
                             wavetable_value_(0.0) {
   inputsockets_.push_back(new InputSocket(*this, "Amplitude"));
   inputsockets_.push_back(new InputSocket(*this, "Frequency"));
@@ -27,18 +27,17 @@ void Oscillator::GenerateSignal(int num_samples) {
   for (int i = 0; i < num_samples; ++i) {
     double output = amplitude[i]*wavetable_value_;
     double increment = (wavetable_length * frequency[i]) / 44100.0;
-    wavetable_position_ += increment;
-    int index = (int)wavetable_position_;
+    double wavetable_position = wavetable_index_ + increment;
+    int index = 0;
     Output().signalbuffer()->buffer()[i] = output;
-    wavetable_index_ = index;
-    wavetable_value_ = math::LinearInterpolation( index, index + 1.0,
+    wavetable_position = fmod(wavetable_position, wavetable_length);
+    wavetable_index_ += (int)increment;
+    wavetable_index_ %= wavetable_length;
+    index = wavetable_index_;
+    wavetable_value_ = math::LinearInterpolation( index, index + 1,
                                                   wavetable[index],
                                                   wavetable[index + 1],
-                                                  wavetable_position_);
-    if (wavetable_position_ > wavetable_length - 1) {
-      wavetable_index_ = 0;
-      wavetable_position_ = 0.0;
-    }
+                                                  wavetable_position);
   }
 }
 
