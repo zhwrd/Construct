@@ -1,8 +1,9 @@
 #include "wire.h"
-#include <core/signal_socket.h>
 #include <cassert>
 #include <cstring>
 #include <iostream>
+#include <core/signal_socket.h>
+#include <utility/dsp.h>
 
 namespace construct {
 namespace core {
@@ -38,10 +39,9 @@ void Wire::ChangeDestination(SignalSocket* destination) {
 
 void Wire::CollectData(int num_samples) {
   source_->CollectData(num_samples);
-  memmove(buffer_->buffer(),
-          source_->signalbuffer()->buffer(),
-          num_samples*sizeof(*buffer_->buffer()));
-  // TODO: mixing
+  utility::dsp::MoveMultiply( source_->signalbuffer()->buffer(),
+                              buffer_->buffer(),
+                              num_samples, volume_);
 }
 
 void Wire::SetVolume(double volume) {

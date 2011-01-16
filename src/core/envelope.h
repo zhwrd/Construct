@@ -29,7 +29,6 @@ class Envelope : public UnitGenerator {
   double duration() const { return duration_; }
   double repeat() const { return repeat_; }
 
-
  private:
   double peak_amplitude_;
   double duration_;

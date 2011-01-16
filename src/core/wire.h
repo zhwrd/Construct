@@ -11,6 +11,8 @@ class SignalBuffer;
 
 class Wire {
  public:
+  typedef int ID;
+
   Wire();
   ~Wire();
   

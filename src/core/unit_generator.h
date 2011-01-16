@@ -14,8 +14,8 @@ class UnitGenerator {
   virtual void GenerateSignal(int num_samples);
   
   inline SignalSocket& Output() { return *outputsockets_[0]; }
-  SignalSocket& GetInputSocket(InputSocket::id_type id);
-  SignalSocket& GetOutputSocket(OutputSocket::id_type id);
+  SignalSocket& GetInputSocket(InputSocket::ID id);
+  SignalSocket& GetOutputSocket(OutputSocket::ID id);
   inline int num_inputsockets() const { return inputsockets_.size(); }
   inline int num_outputsockets() const { return outputsockets_.size(); }
 

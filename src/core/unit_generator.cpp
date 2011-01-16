@@ -19,12 +19,12 @@ void UnitGenerator::GenerateSignal(int num_samples) {
   }
 }
 
-SignalSocket& UnitGenerator::GetInputSocket(OutputSocket::id_type id) {
+SignalSocket& UnitGenerator::GetInputSocket(OutputSocket::ID id) {
   assert(id < inputsockets_.size());
   return *inputsockets_[id];
 }
 
-SignalSocket& UnitGenerator::GetOutputSocket(OutputSocket::id_type id) {
+SignalSocket& UnitGenerator::GetOutputSocket(OutputSocket::ID id) {
   assert(id < outputsockets_.size());
   return *outputsockets_[id];
 }

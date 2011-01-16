@@ -42,14 +42,14 @@ class SignalSocket {
 
 class InputSocket : public SignalSocket {
  public:
-  typedef int id_type;
+  typedef int ID;
   InputSocket(UnitGenerator& unitgenerator, std::string name);
   virtual void CollectData(int num_samples);  
 };
 
 class OutputSocket : public SignalSocket {
  public:
-  typedef int id_type;
+  typedef int ID;
   OutputSocket(UnitGenerator& unitgenerator, std::string name);
   virtual void CollectData(int num_samples);  
 };

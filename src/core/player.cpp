@@ -2,6 +2,7 @@
 #include <cmath>
 #include <audiodrivers/audiodriver.h>
 #include <core/wire.h>
+#include <utility/dsp.h>
 
 namespace construct {
 namespace core {
@@ -16,60 +17,9 @@ Player::~Player() {
 }
 
 void Player::Initialize() {
-  int num_samples = driver_->playback_settings().num_samples;
-  int sample_rate = driver_->playback_settings().sample_rate;
-  
-  // make freq_envelope shape
-  int shape_length = 10;
-  SignalBuffer* freq_shape = new SignalBuffer(shape_length, 1);
-  for (int i = 0; i < shape_length; ++i) {
-    freq_shape->buffer()[i] = 440.0 + ((i/10.0) * 440.0);
-  }
-  
-  // init freq_envelope
-  freq_envelope_.Shape().set_signalbuffer(freq_shape);
-  freq_envelope_.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
-  freq_envelope_.set_duration(1000);
-  freq_envelope_.set_repeat(true);
-  
-  // make amp_envelope shape
-  shape_length = 10;
-  SignalBuffer* amp_shape = new SignalBuffer(shape_length, 1);
-  for (int i = 0; i < shape_length; ++i) {
-    //amp_shape->buffer()[i] = (i / 10.0);
-    amp_shape->buffer()[i] = 1;
-  }
-  
-  // init amp_envelope
-  amp_envelope_.Shape().set_signalbuffer(amp_shape);
-  amp_envelope_.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
-  amp_envelope_.set_duration(10000);
-  amp_envelope_.set_peak_amplitude(0.25);
-
-  // make wavetable
-  double length = sample_rate/20;
-  double omega = 3.14159*2/length;
-  int wavetable_length = (int)length;
-  SignalBuffer* wavetable = new SignalBuffer(wavetable_length, 1); 
-  for (int i = 0; i < wavetable_length; ++i) {
-    wavetable->buffer()[i] = sin(omega*i);
-  }
-
-  // init oscillator
-  oscillator_.Amplitude().set_signalbuffer(new SignalBuffer(num_samples, 1));
-  oscillator_.Frequency().set_signalbuffer(new SignalBuffer(num_samples, 1));
-  oscillator_.Wavetable().set_signalbuffer(wavetable);
-  oscillator_.Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
-  
-  // connect amp_envelope to amplitude
-  Wire* amp_wire = new Wire();
-  amp_wire->set_buffer(new SignalBuffer(num_samples, 1));
-  amp_wire->Connect(&amp_envelope_.Output(), &oscillator_.Amplitude());
-  
-  // connect freq_envelope to frequency
-  Wire* freq_wire = new Wire();
-  freq_wire->set_buffer(new SignalBuffer(num_samples, 1));
-  freq_wire->Connect(&freq_envelope_.Output(), &oscillator_.Frequency());
+  oscillators_.push_back(CreateOscillator(261.63, 0.25));
+  oscillators_.push_back(CreateOscillator(261.63*2, 0.25));
+  oscillators_.push_back(CreateOscillator(392.00, 0.25));
 }
 
 double* Player::AudioWork(void* context, int num_samples) {
@@ -77,8 +27,16 @@ double* Player::AudioWork(void* context, int num_samples) {
 }
 
 double* Player::AudioWork(int num_samples) {
-  oscillator_.Output().CollectData(num_samples);
-  return oscillator_.Output().signalbuffer()->buffer();
+  utility::dsp::Clear(buffer_, num_samples);
+  for ( std::vector<Oscillator*>::iterator i = oscillators_.begin();
+        i != oscillators_.end();
+        ++i) {
+    Oscillator* osc = *i;
+    osc->Output().CollectData(num_samples);
+    utility::dsp::Add(osc->Output().signalbuffer()->buffer(), 
+                      buffer_, num_samples, 1.0);
+  }
+  return buffer_;
 }
 
 void Player::set_driver(audiodrivers::AudioDriver& driver) {
@@ -110,6 +68,60 @@ void Player::set_driver(audiodrivers::AudioDriver& driver) {
     driver_->Open();
   }
 
+}
+
+Oscillator* Player::CreateOscillator(double frequency, double amplitude) {
+  int num_samples = driver_->playback_settings().num_samples;
+  int sample_rate = driver_->playback_settings().sample_rate;
+  
+  // make freq_envelope shape
+  SignalBuffer* freq_shape = new SignalBuffer(1, 1);
+  freq_shape->buffer()[0] = frequency;
+  
+  // init freq_envelope
+  Envelope* freq_envelope = new Envelope();
+  freq_envelope->Shape().set_signalbuffer(freq_shape);
+  freq_envelope->Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  freq_envelope->set_duration(1000);
+  freq_envelope->set_repeat(true);
+  
+  // make amp_envelope shape
+  SignalBuffer* amp_shape = new SignalBuffer(1, 1);
+  amp_shape->buffer()[0] = amplitude;
+  
+  // init amp_envelope
+  Envelope* amp_envelope = new Envelope();
+  amp_envelope->Shape().set_signalbuffer(amp_shape);
+  amp_envelope->Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  amp_envelope->set_duration(1000);
+  amp_envelope->set_repeat(true);
+
+  // make wavetable
+  int wavetable_length = sample_rate/10;
+  double omega = (3.14159*2)/wavetable_length;
+  SignalBuffer* wavetable = new SignalBuffer(wavetable_length, 1); 
+  for (int i = 0; i < wavetable_length; ++i) {
+    wavetable->buffer()[i] = sin(omega*i);
+  }
+
+  // init oscillator
+  Oscillator* oscillator = new Oscillator();
+  oscillator->Amplitude().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  oscillator->Frequency().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  oscillator->Wavetable().set_signalbuffer(wavetable);
+  oscillator->Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
+  
+  // connect amp_envelope to amplitude
+  Wire* amp_wire = new Wire();
+  amp_wire->set_buffer(new SignalBuffer(num_samples, 1));
+  amp_wire->Connect(&amp_envelope->Output(), &oscillator->Amplitude());
+  
+  // connect freq_envelope to frequency
+  Wire* freq_wire = new Wire();
+  freq_wire->set_buffer(new SignalBuffer(num_samples, 1));
+  freq_wire->Connect(&freq_envelope->Output(), &oscillator->Frequency());
+
+  return oscillator;
 }
 
 } // namespace core

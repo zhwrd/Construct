@@ -21,9 +21,12 @@ void Envelope::GenerateSignal(int num_samples) {
   double* shape = Shape().signalbuffer()->buffer();
   double resample_rate = 1.0/duration_;
   int shape_length = Shape().signalbuffer()->num_samples();
+  double increment = (shape_length * 1.0/(duration_ / 1000.0)) / 44100.0;
+  if (shape_length == 1) { 
+    shape_value_ = shape[0]; 
+  }
   for (int i = 0; i < num_samples; ++i) {
     double output = peak_amplitude_*shape_value_;
-    double increment = (shape_length * 1.0/(duration_ / 1000.0)) / 44100.0;
     shape_position_ += increment;
     int index = (int)shape_position_;
     Output().signalbuffer()->buffer()[i] = output;
@@ -32,8 +35,7 @@ void Envelope::GenerateSignal(int num_samples) {
       shape_value_ = math::LinearInterpolation( index, index + 1.0,
                                                 shape[index], shape[index + 1],
                                                 shape_position_);
-    }
-    if (repeat_ && shape_position_ > shape_length - 1) {
+    } else if (repeat_) {
       shape_index_ = 0;
       shape_position_ = 0.0;
     }
