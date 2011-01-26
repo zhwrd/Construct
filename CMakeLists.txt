@@ -1,7 +1,7 @@
 project(Construct)
 cmake_minimum_required(VERSION 2.6)
 
-find_package(Boost REQUIRED COMPONENTS system thread)
+#find_package(Boost REQUIRED COMPONENTS system thread)
 find_package(SDL REQUIRED)
 find_package(OpenGL REQUIRED)
 
@@ -14,7 +14,7 @@ endif()
 include_directories(. src)
 add_subdirectory(src)
 
-add_executable(Construct  src/main.cc
+add_executable(Construct  src/main.cpp
                           ${DEP_SRCS})
 
 target_link_libraries(Construct ${OPENGL_LIBRARIES}

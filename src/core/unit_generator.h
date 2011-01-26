@@ -2,11 +2,13 @@
 #define CONSTRUCT_CORE_UNIT_GENERATOR_H_
 
 #include <core/signal_socket.h>
+#include <core/player_time_info.h>
 
 namespace construct {
 namespace core {
 
 class UnitGenerator {
+ friend class Player;
  public:
   UnitGenerator();
   virtual ~UnitGenerator();
@@ -22,6 +24,7 @@ class UnitGenerator {
  protected:
   std::vector<InputSocket*> inputsockets_;
   std::vector<OutputSocket*> outputsockets_;
+  PlayerTimeInfo time_info_;
 
 };
 

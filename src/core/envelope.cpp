@@ -21,7 +21,8 @@ void Envelope::GenerateSignal(int num_samples) {
   double* shape = Shape().signalbuffer()->buffer();
   double resample_rate = 1.0/duration_;
   int shape_length = Shape().signalbuffer()->num_samples();
-  double increment = (shape_length * 1.0/(duration_ / 1000.0)) / 44100.0;
+  int sample_rate = time_info_.sample_rate;
+  double increment = (shape_length * 1.0/(duration_ / 1000.0)) / sample_rate;
   if (shape_length == 1) { 
     shape_value_ = shape[0]; 
   }

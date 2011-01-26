@@ -3,6 +3,7 @@
 
 #include <core/oscillator.h>
 #include <core/envelope.h>
+#include <core/player_time_info.h>
 
 namespace construct {
 
@@ -21,21 +22,20 @@ class Player {
   static double* AudioWork(void* context, int num_samples);
   double* AudioWork(int num_samples);
 
-  audiodrivers::AudioDriver& driver() { return *driver_; } 
+  const PlayerTimeInfo& time_info() const { return time_info_; }
+  void set_time_info(PlayerTimeInfo time_info);
   const audiodrivers::AudioDriver& driver() const { return *driver_; } 
   void set_driver(audiodrivers::AudioDriver& driver);
   
  private:
   Oscillator* CreateOscillator(double frequency, double amplitude);
 
+  PlayerTimeInfo time_info_;
   audiodrivers::AudioDriver* driver_;
   double* buffer_;
 
   std::vector<Oscillator*> oscillators_;
   std::vector<Envelope*> envelopes_;
-  //Oscillator oscillator_;
-  //Envelope amp_envelope_;
-  //Envelope freq_envelope_;
 
 };
 

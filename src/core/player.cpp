@@ -1,6 +1,6 @@
 #include "player.h"
 #include <cmath>
-#include <audiodrivers/audiodriver.h>
+#include <audiodrivers/audio_driver.h>
 #include <core/wire.h>
 #include <utility/dsp.h>
 
@@ -17,6 +17,7 @@ Player::~Player() {
 }
 
 void Player::Initialize() {
+  //oscillators_.push_back(CreateOscillator(440.00, 0.25));
   oscillators_.push_back(CreateOscillator(261.63, 0.25));
   oscillators_.push_back(CreateOscillator(261.63*2, 0.25));
   oscillators_.push_back(CreateOscillator(392.00, 0.25));
@@ -37,6 +38,11 @@ double* Player::AudioWork(int num_samples) {
                       buffer_, num_samples, 1.0);
   }
   return buffer_;
+}
+
+void Player::set_time_info(PlayerTimeInfo time_info) {
+  time_info_ = time_info;
+  // TODO: change unitgenerator time info
 }
 
 void Player::set_driver(audiodrivers::AudioDriver& driver) {
@@ -102,6 +108,13 @@ Oscillator* Player::CreateOscillator(double frequency, double amplitude) {
   SignalBuffer* wavetable = new SignalBuffer(wavetable_length, 1); 
   for (int i = 0; i < wavetable_length; ++i) {
     wavetable->buffer()[i] = sin(omega*i);
+    /*
+    if (wavetable->buffer()[i] > 0 ) {
+      wavetable->buffer()[i] = 1;
+    } else {
+      wavetable->buffer()[i] = -1;
+    }
+    */
   }
 
   // init oscillator

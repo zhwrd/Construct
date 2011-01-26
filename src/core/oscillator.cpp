@@ -24,9 +24,10 @@ void Oscillator::GenerateSignal(int num_samples) {
   double* frequency = Frequency().signalbuffer()->buffer();
   double* wavetable = Wavetable().signalbuffer()->buffer();
   int wavetable_length = Wavetable().signalbuffer()->num_samples();
+  int sample_rate = time_info_.sample_rate;
   for (int i = 0; i < num_samples; ++i) {
     double output = amplitude[i]*wavetable_value_;
-    double increment = (wavetable_length * frequency[i]) / 44100.0;
+    double increment = (wavetable_length * frequency[i]) / sample_rate;
     double wavetable_position = wavetable_index_ + increment;
     int index = 0;
     Output().signalbuffer()->buffer()[i] = output;

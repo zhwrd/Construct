@@ -11,7 +11,7 @@
 #include <SDL/SDL_opengl.h>
 
 #include <core/player.h>
-#include <audiodrivers/sdlout.h>
+#include <audiodrivers/sdl_out.h>
 
 // Video
 int width = 100;
