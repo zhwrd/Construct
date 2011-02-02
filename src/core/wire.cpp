@@ -10,12 +10,12 @@ namespace core {
 
 Wire::Wire() :  volume_(1.0), pan_(0.0), r_volume_(1.0), l_volume_(1.0),
                 source_(NULL), destination_(NULL), buffer_(NULL) {}
-               
+
 Wire::~Wire() {
   if (source_) Disconnect(source_);
   if (destination_) Disconnect(destination_);
 }
-  
+
 void Wire::Connect(SignalSocket* source, SignalSocket* destination) {
   source_ = source;
   destination_ = destination;

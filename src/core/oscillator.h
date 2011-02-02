@@ -12,7 +12,7 @@ class Oscillator : public UnitGenerator {
   virtual ~Oscillator() {}
 
   virtual void GenerateSignal(int num_samples);
-  
+
   inline SignalSocket& Amplitude() { return *inputsockets_[0]; }
   inline SignalSocket& Frequency() { return *inputsockets_[1]; }
   inline SignalSocket& Wavetable() { return *inputsockets_[2]; }

@@ -15,8 +15,12 @@ class StepGenerator {
   virtual ~StepGenerator();
 
   inline virtual void GenerateSignal(int num_samples) {
+    int num_out_channels = Output().signalbuffer()->num_channels();
     for (int i = 0; i < num_samples; ++i) {
-      Output().signalbuffer()->buffer()[i] = amplitude;
+      for (int channel = 0; channel < num_out_channels; ++channel) {
+        int out_index = i*num_out_channels + channel;
+        Output().signalbuffer()->buffer()[out_index] = amplitude;
+      }
     }
   }
 

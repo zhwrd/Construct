@@ -25,12 +25,16 @@ void Oscillator::GenerateSignal(int num_samples) {
   double* wavetable = Wavetable().signalbuffer()->buffer();
   int wavetable_length = Wavetable().signalbuffer()->num_samples();
   int sample_rate = time_info_.sample_rate;
+  int num_out_channels = Output().signalbuffer()->num_channels();
   for (int i = 0; i < num_samples; ++i) {
     double output = amplitude[i]*wavetable_value_;
     double increment = (wavetable_length * frequency[i]) / sample_rate;
     double wavetable_position = wavetable_index_ + increment;
     int index = 0;
-    Output().signalbuffer()->buffer()[i] = output;
+    for (int channel = 0; channel < num_out_channels; ++channel) {
+      int out_index = i*num_out_channels + channel;
+      Output().signalbuffer()->buffer()[out_index] = output;
+    }
     wavetable_position = fmod(wavetable_position, wavetable_length);
     wavetable_index_ += (int)increment;
     wavetable_index_ %= wavetable_length;

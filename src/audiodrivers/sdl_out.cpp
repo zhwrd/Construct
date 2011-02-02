@@ -65,21 +65,6 @@ void SDLOut::Stop() {
   }
 }
 
-void SDLOut::set_playback_settings(const AudioDriverSettings& settings) {
-  bool was_opened = opened();
-  bool was_started = started();
-  Close();
-  playback_settings_ = settings;
-  if (was_opened) {
-    std::cout << "sdlout wasopened" << std::endl;
-    Open();
-    if (was_started) {
-      std::cout << "sdlout wasstarted" << std::endl;
-      Start();
-    }
-  }
-}
-
 Uint16 SDLOut::ToSDLFormat(int sample_size) {  
   if (sample_size == 8) {
     return AUDIO_S8;

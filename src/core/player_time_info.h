@@ -8,7 +8,9 @@ struct PlayerTimeInfo {
   PlayerTimeInfo() {
     sample_rate = 44100;
     bpm = 120;
+    num_channels = 2;
   }
+  int num_channels;
   int sample_rate;
   int bpm;
 };

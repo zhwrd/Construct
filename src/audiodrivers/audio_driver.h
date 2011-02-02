@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_AUDIODRIVERS_AUDIODRIVER_H_
-#define CONSTRUCT_AUDIODRIVERS_AUDIODRIVER_H_
+#ifndef CONSTRUCT_AUDIODRIVERS_AUDIO_DRIVER_H_
+#define CONSTRUCT_AUDIODRIVERS_AUDIO_DRIVER_H_
 
 #include <stdint.h>
 #include <cstdlib>
@@ -9,12 +9,12 @@ namespace construct {
 namespace audiodrivers {
 
 typedef double* (*AudioWorkCallback) (void* context, int num_samples);
-int const kMaxWorkSamples = 65536;
+int const kMaxWorkSamples= 65536;
 int const kMax16Amplitude = 32767;
 
 struct AudioDriverSettings {
   AudioDriverSettings() {
-    sample_rate = 44100;
+    sample_rate = 48000;
     sample_size = 16;
     num_channels = 2;
     num_samples = 512;
@@ -40,7 +40,16 @@ class AudioDriver {
     callback_context_ = context;
   }
   virtual void set_playback_settings(const AudioDriverSettings& settings) {
+    bool was_opened = opened();
+    bool was_started = started();
+    Close();
     playback_settings_ = settings;
+    if (was_opened) {
+      Open();
+      if (was_started) {
+        Start();
+      }
+    }
   }
   const AudioDriverSettings& playback_settings() const { 
     return playback_settings_;

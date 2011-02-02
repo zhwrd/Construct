@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_AUDIODRIVERS_SDLOUT_H_
-#define CONSTRUCT_AUDIODRIVERS_SDLOUT_H_
+#ifndef CONSTRUCT_AUDIODRIVERS_SDL_OUT_H_
+#define CONSTRUCT_AUDIODRIVERS_SDL_OUT_H_
 
 #include <stdint.h>
 #include <SDL/SDL_audio.h>
@@ -18,8 +18,6 @@ class SDLOut : public AudioDriver {
   virtual bool Start();
   virtual void Stop();
 
-  virtual void set_playback_settings(const AudioDriverSettings& settings);
- 
  protected:
   static Uint16 ToSDLFormat(int sample_size);
   static int ToSampleSize(Uint16 sdl_format);

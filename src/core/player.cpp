@@ -28,14 +28,15 @@ double* Player::AudioWork(void* context, int num_samples) {
 }
 
 double* Player::AudioWork(int num_samples) {
-  utility::dsp::Clear(buffer_, num_samples);
+  int buffer_size = num_samples*time_info_.num_channels;
+  utility::dsp::Clear(buffer_, buffer_size);
   for ( std::vector<Oscillator*>::iterator i = oscillators_.begin();
         i != oscillators_.end();
         ++i) {
     Oscillator* osc = *i;
     osc->Output().CollectData(num_samples);
     utility::dsp::Add(osc->Output().signalbuffer()->buffer(), 
-                      buffer_, num_samples, 1.0);
+                      buffer_, buffer_size, 1.0);
   }
   return buffer_;
 }
@@ -67,7 +68,7 @@ void Player::set_driver(audiodrivers::AudioDriver& driver) {
   }
 
   driver_->set_callback(AudioWork, this);
-  
+
   if (started) {
     driver_->Start();
   } else if (opened) {
@@ -77,26 +78,29 @@ void Player::set_driver(audiodrivers::AudioDriver& driver) {
 }
 
 Oscillator* Player::CreateOscillator(double frequency, double amplitude) {
+  int num_channels = time_info_.num_channels;
+  int sample_rate = time_info_.sample_rate;
   int num_samples = driver_->playback_settings().num_samples;
-  int sample_rate = driver_->playback_settings().sample_rate;
-  
+
   // make freq_envelope shape
   SignalBuffer* freq_shape = new SignalBuffer(1, 1);
   freq_shape->buffer()[0] = frequency;
-  
+
   // init freq_envelope
   Envelope* freq_envelope = new Envelope();
+  freq_envelope->time_info_ = time_info_;
   freq_envelope->Shape().set_signalbuffer(freq_shape);
   freq_envelope->Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
   freq_envelope->set_duration(1000);
   freq_envelope->set_repeat(true);
-  
+
   // make amp_envelope shape
   SignalBuffer* amp_shape = new SignalBuffer(1, 1);
   amp_shape->buffer()[0] = amplitude;
-  
+
   // init amp_envelope
   Envelope* amp_envelope = new Envelope();
+  amp_envelope->time_info_ = time_info_;
   amp_envelope->Shape().set_signalbuffer(amp_shape);
   amp_envelope->Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
   amp_envelope->set_duration(1000);
@@ -119,16 +123,17 @@ Oscillator* Player::CreateOscillator(double frequency, double amplitude) {
 
   // init oscillator
   Oscillator* oscillator = new Oscillator();
+  oscillator->time_info_ = time_info_;
   oscillator->Amplitude().set_signalbuffer(new SignalBuffer(num_samples, 1));
   oscillator->Frequency().set_signalbuffer(new SignalBuffer(num_samples, 1));
   oscillator->Wavetable().set_signalbuffer(wavetable);
-  oscillator->Output().set_signalbuffer(new SignalBuffer(num_samples, 1));
-  
+  oscillator->Output().set_signalbuffer(new SignalBuffer(num_samples, num_channels));
+
   // connect amp_envelope to amplitude
   Wire* amp_wire = new Wire();
   amp_wire->set_buffer(new SignalBuffer(num_samples, 1));
   amp_wire->Connect(&amp_envelope->Output(), &oscillator->Amplitude());
-  
+
   // connect freq_envelope to frequency
   Wire* freq_wire = new Wire();
   freq_wire->set_buffer(new SignalBuffer(num_samples, 1));
