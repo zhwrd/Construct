@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 
 #find_package(Boost REQUIRED COMPONENTS system thread)
 find_package(OpenGL REQUIRED)
-find_package(SDL REQUIRED)
+#find_package(SDL REQUIRED)
 
 include(cmake/configure.cmake)
 include_directories(. src)
@@ -31,6 +31,6 @@ add_executable(Construct  src/main.cpp
 
 target_link_libraries(Construct ${EXTRA_LIBS}
                                 ${OPENGL_LIBRARIES}
-                                ${SDL_LIBRARIES}
+                                #${SDL_LIBRARIES}
                                 core
                                 audiodrivers)
