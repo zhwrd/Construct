@@ -1,5 +1,14 @@
-To Build:
+# Construct
 
+A modular synthesizer I am building to explore synthesis methods.
+
+# Dependencies:
+
+Mac OS X
+Qt4
+OpenGL
+CMake
+
+# Build Instructions:
 cmake .
-
 make
