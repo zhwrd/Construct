@@ -3,15 +3,16 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "config.h"
-
 #include <core/player.h>
 #include <audiodrivers/coreaudio_out.h>
 #include <frontend/qgl_construct.h>
+#include <QApplication>
+#include "config.h"
 
 int main(int argc, char* argv[]) {
   using namespace construct;
+
+  QApplication app(argc, argv);
 
   audiodrivers::AudioDriverSettings settings;
   settings.sample_rate = 48000;
@@ -34,6 +35,10 @@ int main(int argc, char* argv[]) {
   audio_out.Start();
   std::cout << "Output device started." << std::endl;
 
-  char c = getchar();
-  return 0;
+  frontend::QGLConstruct main_window;
+  main_window.show();
+
+  int result = app.exec();
+  audio_out.Close();
+  return result;
 }

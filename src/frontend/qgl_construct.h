@@ -11,7 +11,19 @@ class QGLConstruct : public QGLWidget {
  Q_OBJECT
  public:
   QGLConstruct(QWidget* parent = NULL);
-  ~QGLConstruct(); 
+  virtual ~QGLConstruct();
+
+  virtual QSize minimumSizeHint() const;
+  virtual QSize sizeHint() const;
+
+ protected:
+  virtual void initializeGL();
+  virtual void paintGL();
+  virtual void resizeGL(int width, int height);
+  virtual void mousePressEvent(QMouseEvent *event);
+  virtual void mouseMoveEvent(QMouseEvent *event);
+
+ private:
 };
 
 } // namespace construct
