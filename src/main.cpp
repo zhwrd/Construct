@@ -8,6 +8,7 @@
 
 #include <core/player.h>
 #include <audiodrivers/coreaudio_out.h>
+#include <frontend/qgl_construct.h>
 
 int main(int argc, char* argv[]) {
   using namespace construct;
@@ -19,6 +20,7 @@ int main(int argc, char* argv[]) {
   audiodrivers::CoreAudioOut audio_out;
   audio_out.set_playback_settings(settings);
   audio_out.Open();
+  std::cout << "Output device initialized." << std::endl;
 
   core::PlayerTimeInfo time_info;
   time_info.sample_rate = settings.sample_rate;
@@ -28,8 +30,9 @@ int main(int argc, char* argv[]) {
   player.set_driver(audio_out);
   player.set_time_info(time_info);
   player.Initialize();
-  std::cout << "Initialized" << std::endl;
+  std::cout << "Player initialized." << std::endl;
   audio_out.Start();
+  std::cout << "Output device started." << std::endl;
 
   char c = getchar();
   return 0;
