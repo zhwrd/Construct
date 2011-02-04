@@ -9,7 +9,6 @@ find_package(OpenGL REQUIRED)
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 add_definitions(-DQT_NO_KEYWORDS)
-set(QT_USE_QTOPENGL true)
 include_directories(${QT_QTOPENGL_INCLUDE_DIR})
 
 # Set Apple frameworks
@@ -33,6 +32,7 @@ add_executable(Construct  src/main.cpp)
 target_link_libraries(Construct ${EXTRA_LIBS}
                                 ${OPENGL_LIBRARIES}
                                 ${QT_LIBRARIES}
+                                ${QT_QTOPENGL_LIBRARY}
                                 core
                                 audiodrivers
                                 frontend)
