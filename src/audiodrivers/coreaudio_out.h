@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_AUDIODRIVERS_COREAUDIO_OUT_H_
-#define CONSTRUCT_AUDIODRIVERS_COREAUDIO_OUT_H_
+#ifndef SRC_AUDIODRIVERS_COREAUDIO_OUT_H_
+#define SRC_AUDIODRIVERS_COREAUDIO_OUT_H_
 
 #include <audiodrivers/audio_driver.h>
 #include <CoreServices/CoreServices.h>

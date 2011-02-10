@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_CORE_ENVELOPE_H_
-#define CONSTRUCT_CORE_ENVELOPE_H_
+#ifndef SRC_CORE_ENVELOPE_H_
+#define SRC_CORE_ENVELOPE_H_
 
 #include "unit_generator.h"
 #include <cassert>
@@ -24,7 +24,7 @@ class Envelope : public UnitGenerator {
   }
   inline void set_repeat(bool repeat) { repeat_ = repeat; }
 
-  inline SignalSocket& Shape() const { return *inputsockets_[0]; }
+  inline SignalSocket& shape() const { return *inputsockets_[0]; }
   double peak_amplitude() const { return peak_amplitude_; }
   double duration() const { return duration_; }
   double repeat() const { return repeat_; }

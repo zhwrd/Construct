@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_CORE_SIGNAL_BUFFER_H_
-#define CONSTRUCT_CORE_SIGNAL_BUFFER_H_
+#ifndef SRC_CORE_SIGNAL_BUFFER_H_
+#define SRC_CORE_SIGNAL_BUFFER_H_
 
 #include <stdint.h>
 

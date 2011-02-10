@@ -24,7 +24,7 @@ void QGLConstruct::initializeGL() {
 }
 
 void QGLConstruct::paintGL() {
-
+  glClear(GL_COLOR_BUFFER_BIT); 
 }
 
 void QGLConstruct::resizeGL(int width, int height) {

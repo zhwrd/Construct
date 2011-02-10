@@ -1,5 +1,5 @@
-#ifndef FRONTEND_QGL_CONSTRUCT_H_
-#define FRONTEND_QGL_CONSTRUCT_H_
+#ifndef SRC_FRONTEND_QGL_CONSTRUCT_H_
+#define SRC_FRONTEND_QGL_CONSTRUCT_H_
 
 #include <QGLWidget>
 #include <QMainWindow>

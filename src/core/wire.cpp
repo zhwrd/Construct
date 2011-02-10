@@ -44,7 +44,7 @@ void Wire::CollectData(int num_samples) {
                               num_samples, volume_);
 }
 
-void Wire::SetVolume(double volume) {
+void Wire::set_volume(double volume) {
   volume_ = volume;
   if (pan_ > 0.0) {
     r_volume_ = volume;
@@ -55,9 +55,9 @@ void Wire::SetVolume(double volume) {
   }
 }
 
-void Wire::SetPan(double pan) {
+void Wire::set_pan(double pan) {
   pan_ = pan;
-  SetVolume(volume_);
+  set_volume(volume_);
 }
 
 void Wire::Disconnect(SignalSocket* signalsocket) {

@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_CORE_WIRE_H_
-#define CONSTRUCT_CORE_WIRE_H_
+#ifndef SRC_CORE_WIRE_H_
+#define SRC_CORE_WIRE_H_
 
 #include <stdint.h>
 
@@ -15,16 +15,18 @@ class Wire {
 
   Wire();
   ~Wire();
-  
+
   virtual void Connect(SignalSocket* source, SignalSocket* destination);
   virtual void ChangeSource(SignalSocket* source);
   virtual void ChangeDestination(SignalSocket* destination);
   virtual void CollectData(int num_samples);
-  virtual void SetVolume(double volume);
-  virtual void SetPan(double pan);
 
-  virtual inline SignalBuffer* buffer() { return buffer_; }
-  virtual inline void set_buffer(SignalBuffer* buffer) { buffer_ = buffer; }
+  inline double volume() const { return volume_; }
+  virtual void set_volume(double volume);
+  inline double pan() const { return pan_; }
+  virtual void set_pan(double pan);
+  inline SignalBuffer* buffer() { return buffer_; }
+  inline void set_buffer(SignalBuffer* buffer) { buffer_ = buffer; }
 
  protected:
   virtual void Disconnect(SignalSocket* signalsocket);

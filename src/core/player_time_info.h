@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_CORE_PLAYER_TIME_INFO_H_
-#define CONSTRUCT_CORE_PLAYER_TIME_INFO_H_
+#ifndef SRC_CORE_PLAYER_TIME_INFO_H_
+#define SRC_CORE_PLAYER_TIME_INFO_H_
 
 namespace construct {
 namespace core {

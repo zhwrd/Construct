@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_CORE_PLAYER_H_
-#define CONSTRUCT_CORE_PLAYER_H_
+#ifndef SRC_CORE_PLAYER_H_
+#define SRC_CORE_PLAYER_H_
 
 #include <core/oscillator.h>
 #include <core/envelope.h>

@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_CORE_OSCILLATOR_H_
-#define CONSTRUCT_CORE_OSCILLATOR_H_
+#ifndef SRC_CORE_OSCILLATOR_H_
+#define SRC_CORE_OSCILLATOR_H_
 
 #include <core/unit_generator.h>
 
@@ -13,9 +13,9 @@ class Oscillator : public UnitGenerator {
 
   virtual void GenerateSignal(int num_samples);
 
-  inline SignalSocket& Amplitude() { return *inputsockets_[0]; }
-  inline SignalSocket& Frequency() { return *inputsockets_[1]; }
-  inline SignalSocket& Wavetable() { return *inputsockets_[2]; }
+  inline SignalSocket& amplitude() { return *inputsockets_[0]; }
+  inline SignalSocket& frequency() { return *inputsockets_[1]; }
+  inline SignalSocket& wavetable() { return *inputsockets_[2]; }
 
  protected:
   int wavetable_index_;

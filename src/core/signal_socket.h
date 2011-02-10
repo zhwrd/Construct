@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_CORE_SIGNAL_SOCKET_H_
-#define CONSTRUCT_CORE_SIGNAL_SOCKET_H_
+#ifndef SRC_CORE_SIGNAL_SOCKET_H_
+#define SRC_CORE_SIGNAL_SOCKET_H_
 
 #include <core/signal_buffer.h>
 #include <core/wire.h>

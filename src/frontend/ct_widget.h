@@ -1,6 +1,8 @@
-#ifndef FRONTEND_CT_WIDGET_H_
-#define FRONTEND_CT_WIDGET_H_
+#ifndef SRC_FRONTEND_CT_WIDGET_H_
+#define SRC_FRONTEND_CT_WIDGET_H_
 
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include <vector>
 
 namespace construct {

@@ -1,5 +1,5 @@
-#ifndef CONSTRUCT_AUDIODRIVERS_SDL_OUT_H_
-#define CONSTRUCT_AUDIODRIVERS_SDL_OUT_H_
+#ifndef SRC_AUDIODRIVERS_SDL_OUT_H_
+#define SRC_AUDIODRIVERS_SDL_OUT_H_
 
 #include <stdint.h>
 #include <SDL/SDL_audio.h>
