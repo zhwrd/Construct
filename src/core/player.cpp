@@ -18,9 +18,9 @@ Player::~Player() {
 
 void Player::Initialize() {
   //oscillators_.push_back(CreateOscillator(440.00, 0.25));
-  oscillators_.push_back(CreateOscillator(261.63, 0.25));
-  oscillators_.push_back(CreateOscillator(261.63*2, 0.25));
-  oscillators_.push_back(CreateOscillator(392.00, 0.25));
+  //oscillators_.push_back(CreateOscillator(261.63, 0.25));
+  //oscillators_.push_back(CreateOscillator(261.63*2, 0.25));
+  //oscillators_.push_back(CreateOscillator(392.00, 0.25));
 }
 
 double* Player::AudioWork(void* context, int num_samples) {
@@ -139,6 +139,7 @@ Oscillator* Player::CreateOscillator(double frequency, double amplitude) {
   freq_wire->set_buffer(new SignalBuffer(num_samples, 1));
   freq_wire->Connect(&freq_envelope->output(), &oscillator->frequency());
 
+  oscillators_.push_back(oscillator);
   return oscillator;
 }
 

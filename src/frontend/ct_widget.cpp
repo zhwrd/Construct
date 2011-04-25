@@ -5,7 +5,18 @@ namespace construct {
 namespace frontend {
 
 CtWidget::CtWidget(CtWidget* parent) {
-
+  parent_ = parent;
+  enabled_ = true;
+  is_window_ = false;
+  visible_ = true;
+  width_ = 0;
+  height_ = 0;
+  x_ = 0;
+  y_ = 0;
+  minimum_width_ = 0;
+  maximum_width_ = 0;
+  minimum_height_ = 0;
+  maximum_height_ = 0;
 }
 
 CtWidget::~CtWidget() {

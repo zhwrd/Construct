@@ -19,16 +19,17 @@ class Player {
   ~Player();
 
   void Initialize();
-  static double* AudioWork(void* context, int num_samples);
   double* AudioWork(int num_samples);
 
   const PlayerTimeInfo& time_info() const { return time_info_; }
   void set_time_info(PlayerTimeInfo time_info);
   const audiodrivers::AudioDriver& driver() const { return *driver_; } 
   void set_driver(audiodrivers::AudioDriver& driver);
-  
- private:
+
   Oscillator* CreateOscillator(double frequency, double amplitude);
+
+ private:
+  static double* AudioWork(void* context, int num_samples);
 
   PlayerTimeInfo time_info_;
   audiodrivers::AudioDriver* driver_;

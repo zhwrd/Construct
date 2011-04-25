@@ -36,9 +36,9 @@ void InputSocket::CollectData(int num_samples) {
         ++i) {
     Wire* wire = *i;
     wire->CollectData(num_samples);
-    memmove(signalbuffer_->buffer(),
-            wire->buffer()->buffer(),
-            num_samples*sizeof(*signalbuffer_->buffer()));
+    memcpy(signalbuffer_->buffer(),
+           wire->buffer()->buffer(),
+           num_samples*sizeof(*signalbuffer_->buffer()));
   }
 }
 

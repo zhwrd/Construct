@@ -3,20 +3,21 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+
 #include <core/player.h>
 #include <audiodrivers/coreaudio_out.h>
-#include <frontend/qgl_construct.h>
-#include <QApplication>
+#include <frontend/ct_main_window.h>
 #include "config.h"
 
 int main(int argc, char* argv[]) {
   using namespace construct;
 
-  QApplication app(argc, argv);
-
   audiodrivers::AudioDriverSettings settings;
   settings.sample_rate = 48000;
-  settings.num_channels = 2;
+  settings.num_channels = 1;
 
   audiodrivers::CoreAudioOut audio_out;
   audio_out.set_playback_settings(settings);
@@ -30,15 +31,25 @@ int main(int argc, char* argv[]) {
   core::Player player;
   player.set_driver(audio_out);
   player.set_time_info(time_info);
-  player.Initialize();
+
+  core::Oscillator* osc = player.CreateOscillator(440, 0.25);
+
   std::cout << "Player initialized." << std::endl;
   audio_out.Start();
   std::cout << "Output device started." << std::endl;
 
-  frontend::QGLConstruct main_window;
-  main_window.show();
+  // Initialize SDL
+  frontend::CtMainWindow main_window;
+  if (!main_window.Initialize()) {
+    return 1;
+  }
+  main_window.AddOscilloscope(osc);
 
-  int result = app.exec();
+  for (int i = 0; i < 10000; ++i) {
+    main_window.Draw();
+  }
+  std::cout << "DONE" << std::endl;
+
   audio_out.Close();
-  return result;
+  return 0;
 }

@@ -13,9 +13,9 @@ class SignalBuffer {
 
   void Clear();
 
-  double* buffer() const { return buffer_; }
-  int num_samples() const { return num_samples_; }
-  int num_channels() const { return num_channels_; }
+  inline double* buffer() const { return buffer_; }
+  inline int num_samples() const { return num_samples_; }
+  inline int num_channels() const { return num_channels_; }
  
  private:
   double* buffer_;
