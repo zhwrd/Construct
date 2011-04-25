@@ -30,6 +30,7 @@ include_directories(. src)
 add_subdirectory(src)
 
 add_executable(Construct  src/main.cpp
+                          src/construct_app.h src/construct_app.cpp
                           ${DEP_SRCS})
 target_link_libraries(Construct ${EXTRA_LIBS}
                                 ${OPENGL_LIBRARIES}
