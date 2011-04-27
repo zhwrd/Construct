@@ -32,6 +32,7 @@ void CtWidget::set_parent(CtWidget* parent) {
 
 void CtWidget::add_child(CtWidget* child) {
   children_.push_back(child);
+  child->resize(width_, height_);
 }
 
 void CtWidget::remove_child(CtWidget* child) {
@@ -51,12 +52,13 @@ void CtWidget::set_enabled(bool enabled) {
   enabled_ = enabled;
 }
 
-void CtWidget::Draw() {
-
-}
-
-void CtWidget::Redraw() {
-
+void CtWidget::redraw() {
+  Draw();
+  for ( CtWidgetList::iterator i = children_.begin();
+        i != children_.end();
+        ++i) {
+    (*i)->redraw();
+  }
 }
 
 void CtWidget::set_visible(bool visible) {
@@ -81,6 +83,10 @@ void CtWidget::OnMouseRelease(const CtMouseEvent& event) {
 }
 
 void CtWidget::OnMouseMove(const CtMouseEvent& event) {
+
+}
+
+void CtWidget::Draw() {
 
 }
 

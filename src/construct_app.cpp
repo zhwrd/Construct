@@ -1,6 +1,9 @@
 #include "construct_app.h"
 #include <iostream>
 #include <frontend/ct_mouse_event.h>
+#include <frontend/ct_oscilloscope.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_opengl.h>
 
 namespace construct {
 
@@ -38,9 +41,15 @@ bool ConstructApp::Initialize() {
   std::cout << "Player initialized." << std::endl;
 
   // Initialize SDL
+  int width = 400;
+  int height = 400;
+  InitializeSDL(width, height);
   window_ = new frontend::CtMainWindow();
-  window_->Initialize();
-  window_->AddOscilloscope(osc);
+  window_->resize(width, height);
+  //window_->AddOscilloscope(osc);
+  frontend::CtOscilloscope* ct_osc = new frontend::CtOscilloscope();
+  ct_osc->set_unitgenerator(osc);
+  window_->add_child(ct_osc);
   
   return true;
 }
@@ -53,7 +62,9 @@ int ConstructApp::Execute() {
     while (SDL_PollEvent(&event)) {
       OnEvent(&event);
     }
-    window_->Draw();
+    glClear(GL_COLOR_BUFFER_BIT);
+    window_->redraw();
+    SDL_GL_SwapBuffers();
   }
   audio_out_->Close();
   return 0;
@@ -73,6 +84,46 @@ void ConstructApp::OnEvent(SDL_Event* event) {
       window_->OnMouseMove(mouse_event);
       break;
   }
+}
+
+bool ConstructApp::InitializeSDL(int width, int height) {
+  // Initialize SDL
+  const SDL_VideoInfo* info = NULL;
+  int bpp = 0;
+  int flags = 0;
+
+  if (SDL_Init(SDL_INIT_VIDEO)) {
+    std::cout << "Failed to initialize SDL." << std::endl;
+    return false;
+  }
+
+  info = SDL_GetVideoInfo();
+  if (!info) {
+    std::cout << "Failed to get video info." << std::endl;
+    return false;
+  }
+  bpp = info->vfmt->BitsPerPixel;
+  
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+  SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+  SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+  SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+  SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+
+  SDL_Surface* drawContext;
+  flags = SDL_OPENGL;
+  drawContext = SDL_SetVideoMode(width, height, bpp, flags);
+
+  // Intialize OpenGL
+  glClearColor(0.0, 0.0, 0.0, 0.0);
+  glDisable(GL_DEPTH_TEST);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(0, width, 0, height, -1, 1);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+  return true;
 }
 
 } // namespace construct

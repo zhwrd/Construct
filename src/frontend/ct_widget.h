@@ -31,8 +31,7 @@ class CtWidget {
   void set_enabled(bool enabled);
 
   // Drawing
-  virtual void Draw();
-  void Redraw();
+  void redraw();
   inline bool visible() const { return visible_; }
   void set_visible(bool visible);
 
@@ -78,6 +77,7 @@ class CtWidget {
   virtual void OnMousePress(const CtMouseEvent& event);
   virtual void OnMouseRelease(const CtMouseEvent& event);
   virtual void OnMouseMove(const CtMouseEvent& event);
+  virtual void Draw();
 
  private:
   CtWidget* parent_;

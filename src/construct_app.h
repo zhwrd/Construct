@@ -1,6 +1,8 @@
 #ifndef SRC_CONSTRUCT_APP_H_
 #define SRC_CONSTRUCT_APP_H_
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_opengl.h>
 #include <core/player.h>
 #include <audiodrivers/coreaudio_out.h>
 #include <frontend/ct_main_window.h>
@@ -13,10 +15,12 @@ class ConstructApp {
   ~ConstructApp();
 
   bool Initialize();
+
   int Execute();
 
  private:
   void OnEvent(SDL_Event* event);
+  bool InitializeSDL(int width, int height);
 
   audiodrivers::AudioDriver* audio_out_;
   core::Player* player_;
