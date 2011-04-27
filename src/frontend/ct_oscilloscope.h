@@ -9,7 +9,7 @@ namespace frontend {
 
 class CtOscilloscope : public CtWidget {
  public:
-  CtOscilloscope(CtWidget* parent = NULL);
+  explicit CtOscilloscope(CtWidget* parent = NULL);
   virtual ~CtOscilloscope();
 
   virtual void Draw();

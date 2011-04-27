@@ -6,9 +6,9 @@ namespace frontend {
 
 enum KeyboardModifier {
   NO_KEY = 0x00000000,
-  SHIFT = 0x02000000,
-  CONTROL = 0x04000000,
-  ALT = 0x08000000
+  SHIFT = 0x00000001,
+  CONTROL = 0x00000002,
+  ALT = 0x00000004
 };
 
 struct CtInputEvent {

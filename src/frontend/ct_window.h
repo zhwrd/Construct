@@ -11,7 +11,7 @@ namespace frontend {
 
 class CtWindow : public CtWidget {
  public:
-  CtWindow();
+  explicit CtWindow(CtWidget* parent = NULL);
   virtual ~CtWindow();
 
   bool Initialize();
