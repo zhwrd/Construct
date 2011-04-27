@@ -1,14 +1,16 @@
 # Construct
 
-A modular synthesizer I am building to explore synthesis methods.
+A modular sound synthesizer with OpenGL GUI framework. The goal is to learn and
+experiment with different types of sound synthesis and user interaction.
 
 # Dependencies:
 
 Mac OS X
-Qt4
+SDL
 OpenGL
 CMake
 
 # Build Instructions:
+
 cmake .
 make
