@@ -9,6 +9,8 @@ namespace construct {
 
 ConstructApp::ConstructApp() {
   finished_ = false;
+  width_ = 800;
+  height_ = 400;
 }
 
 ConstructApp::~ConstructApp() {
@@ -41,12 +43,12 @@ bool ConstructApp::Initialize() {
   std::cout << "Player initialized." << std::endl;
 
   // Initialize SDL
-  int width = 400;
-  int height = 400;
-  InitializeSDL(width, height);
-  window_ = new frontend::CtMainWindow();
-  window_->resize(width, height);
-  //window_->AddOscilloscope(osc);
+  InitializeSDL();
+
+  // Initialize GUI
+  window_ = new frontend::CtWidget();
+  window_->resize(width_, height_);
+
   frontend::CtOscilloscope* ct_osc = new frontend::CtOscilloscope();
   ct_osc->set_unitgenerator(osc);
   window_->add_child(ct_osc);
@@ -86,7 +88,7 @@ void ConstructApp::OnEvent(SDL_Event* event) {
   }
 }
 
-bool ConstructApp::InitializeSDL(int width, int height) {
+bool ConstructApp::InitializeSDL() {
   // Initialize SDL
   const SDL_VideoInfo* info = NULL;
   int bpp = 0;
@@ -112,14 +114,14 @@ bool ConstructApp::InitializeSDL(int width, int height) {
 
   SDL_Surface* drawContext;
   flags = SDL_OPENGL;
-  drawContext = SDL_SetVideoMode(width, height, bpp, flags);
+  drawContext = SDL_SetVideoMode(width_, height_, bpp, flags);
 
   // Intialize OpenGL
   glClearColor(0.0, 0.0, 0.0, 0.0);
   glDisable(GL_DEPTH_TEST);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(0, width, 0, height, -1, 1);
+  glOrtho(0, width_, 0, height_, -1, 1);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 

@@ -12,6 +12,7 @@ namespace frontend {
 
 class CtWidget {
  public:
+  friend class construct::ConstructApp;
   typedef std::vector<CtWidget*> CtWidgetList;
 
   explicit CtWidget(CtWidget* parent = NULL);

@@ -1,5 +1,5 @@
-#ifndef SRC_FRONTEND_CT_MAINWINDOW_H_
-#define SRC_FRONTEND_CT_MAINWINDOW_H_
+#ifndef SRC_FRONTEND_CT_WINDOW_H_
+#define SRC_FRONTEND_CT_WINDOW_H_
 
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -7,24 +7,18 @@
 #include <frontend/ct_widget.h>
 
 namespace construct {
-class ConstructApp;
 namespace frontend {
 
-class CtMainWindow : public CtWidget {
+class CtWindow : public CtWidget {
  public:
-  friend class construct::ConstructApp;
-  CtMainWindow();
-  virtual ~CtMainWindow();
+  CtWindow();
+  virtual ~CtWindow();
 
   bool Initialize();
 
  protected:
   void Draw();
   void OnMouseMove(const CtMouseEvent& event);
-
- private:
-  int width_;
-  int height_;
 };
 
 } // namespace frontend

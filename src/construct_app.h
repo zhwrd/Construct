@@ -5,7 +5,7 @@
 #include <SDL/SDL_opengl.h>
 #include <core/player.h>
 #include <audiodrivers/coreaudio_out.h>
-#include <frontend/ct_main_window.h>
+#include <frontend/ct_widget.h>
 
 namespace construct {
 
@@ -20,12 +20,14 @@ class ConstructApp {
 
  private:
   void OnEvent(SDL_Event* event);
-  bool InitializeSDL(int width, int height);
+  bool InitializeSDL();
 
   audiodrivers::AudioDriver* audio_out_;
   core::Player* player_;
-  frontend::CtMainWindow* window_;
+  frontend::CtWidget* window_;
   bool finished_;
+  int width_;
+  int height_;
 
 };
 
