@@ -7,18 +7,24 @@
 #include <OpenGL/glu.h>
 
 #include <frontend/ct_oscilloscope.h>
+#include <frontend/ct_widget.h>
 
 namespace construct {
+class ConstructApp;
 namespace frontend {
 
-class CtMainWindow {
+class CtMainWindow : public CtWidget {
  public:
+  friend class construct::ConstructApp;
   CtMainWindow();
   virtual ~CtMainWindow();
 
   bool Initialize();
-  void Draw();
   void AddOscilloscope(core::UnitGenerator* unitgenerator);
+  void Draw();
+
+ protected:
+  void OnMouseMove(const CtMouseEvent& event);
 
  private:
   int width_;
@@ -26,7 +32,7 @@ class CtMainWindow {
   CtOscilloscope* oscilloscope_;
 };
 
-} // namespace construct
 } // namespace frontend
+} // namespace construct
 
 #endif

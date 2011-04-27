@@ -23,30 +23,30 @@ CtWidget::~CtWidget() {
 
 }
 
-void CtWidget::SetParent(CtWidget* parent) {
+void CtWidget::set_parent(CtWidget* parent) {
   if (parent_) {
-    parent_->RemoveChild(this);
+    parent_->remove_child(this);
   }
   parent_ = parent;
 }
 
-void CtWidget::AddChild(CtWidget* child) {
+void CtWidget::add_child(CtWidget* child) {
   children_.push_back(child);
 }
 
-void CtWidget::RemoveChild(CtWidget* child) {
+void CtWidget::remove_child(CtWidget* child) {
   std::remove(children_.begin(), children_.end(), child);
 }
 
-bool CtWidget::IsParentOf(CtWidget* child) {
+bool CtWidget::is_parent_of(CtWidget* child) {
   return std::count(children_.begin(), children_.end(), child);
 }
 
-void CtWidget::SetEnabled(bool enabled) {
+void CtWidget::set_enabled(bool enabled) {
   for ( CtWidgetList::iterator i = children_.begin();
         i != children_.end();
         ++i) {
-    (*i)->SetEnabled(enabled);
+    (*i)->set_enabled(enabled);
   }
   enabled_ = enabled;
 }
@@ -59,13 +59,29 @@ void CtWidget::Redraw() {
 
 }
 
-void CtWidget::SetVisible(bool visible) {
+void CtWidget::set_visible(bool visible) {
   for ( CtWidgetList::iterator i = children_.begin();
         i != children_.end();
         ++i) {
-    (*i)->SetVisible(visible);
+    (*i)->set_visible(visible);
   }
   visible_ = visible;
+}
+
+void CtWidget::OnMouseDoubleClick(const CtMouseEvent& event) {
+
+}
+
+void CtWidget::OnMousePress(const CtMouseEvent& event) {
+
+}
+
+void CtWidget::OnMouseRelease(const CtMouseEvent& event) {
+
+}
+
+void CtWidget::OnMouseMove(const CtMouseEvent& event) {
+
 }
 
 } // namespace frontend

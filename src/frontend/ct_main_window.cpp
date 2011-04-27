@@ -1,5 +1,6 @@
 #include "ct_main_window.h"
 #include <iostream>
+#include <frontend/ct_mouse_event.h>
 
 namespace construct {
 namespace frontend {
@@ -63,6 +64,9 @@ void CtMainWindow::Draw() {
   glClear(GL_COLOR_BUFFER_BIT);
   oscilloscope_->Draw();
   SDL_GL_SwapBuffers();
+}
+
+void CtMainWindow::OnMouseMove(const CtMouseEvent& event) {
 }
 
 } // namespace construct

@@ -14,6 +14,8 @@ int main(int argc, char* argv[]) {
   using namespace construct;
 
   ConstructApp app;
-  app.Initialize();
-  return app.Execute();
+  if (app.Initialize()) {
+    return app.Execute();
+  }
+  return 1;
 }

@@ -1,5 +1,6 @@
 #include "construct_app.h"
 #include <iostream>
+#include <frontend/ct_mouse_event.h>
 
 namespace construct {
 
@@ -28,7 +29,11 @@ bool ConstructApp::Initialize() {
   player_ = new core::Player();
   player_->set_driver(*audio_out_);
   player_->set_time_info(time_info);
-  core::Oscillator* osc = player_->CreateOscillator(440, 0.25);
+  core::Oscillator* osc;
+  //osc = player_->CreateOscillator(440, 0.25);
+  osc = player_->CreateOscillator(392.00, 0.25);
+  osc = player_->CreateOscillator(261.63*2, 0.25);
+  osc = player_->CreateOscillator(261.63, 0.25);
 
   std::cout << "Player initialized." << std::endl;
 
@@ -51,12 +56,21 @@ int ConstructApp::Execute() {
     window_->Draw();
   }
   audio_out_->Close();
+  return 0;
 }
 
 void ConstructApp::OnEvent(SDL_Event* event) {
+  frontend::CtMouseEvent mouse_event;
   switch (event->type) {
     case SDL_QUIT:
       finished_ = true;
+      break;
+    case SDL_MOUSEMOTION:
+      mouse_event.x = event->motion.xrel;
+      mouse_event.y = event->motion.yrel;
+      mouse_event.global_x = event->motion.x;
+      mouse_event.global_y = event->motion.y;
+      window_->OnMouseMove(mouse_event);
       break;
   }
 }

@@ -4,8 +4,10 @@
 #include <vector>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
+#include <frontend/ct_mouse_event.h>
 
 namespace construct {
+class ConstructApp;
 namespace frontend {
 
 class CtWidget {
@@ -18,21 +20,21 @@ class CtWidget {
   // Child/Parent
   inline CtWidget* parent() const { return parent_; }
   inline const CtWidgetList& children() { return children_; }
-  void SetParent(CtWidget* parent);
-  void AddChild(CtWidget* child);
-  void RemoveChild(CtWidget* child);
-  bool IsParentOf(CtWidget* child);
+  void set_parent(CtWidget* parent);
+  void add_child(CtWidget* child);
+  void remove_child(CtWidget* child);
+  bool is_parent_of(CtWidget* child);
 
   // States
   inline bool is_window() const { return is_window_; }
   inline bool enabled() const { return enabled_; }
-  void SetEnabled(bool enabled);
+  void set_enabled(bool enabled);
 
   // Drawing
   virtual void Draw();
   void Redraw();
   inline bool visible() const { return visible_; }
-  void SetVisible(bool visible);
+  void set_visible(bool visible);
 
   // Geometry
   inline int width() const { return width_; }
@@ -72,6 +74,10 @@ class CtWidget {
 
  protected:
   // Mouse events
+  virtual void OnMouseDoubleClick(const CtMouseEvent& event);
+  virtual void OnMousePress(const CtMouseEvent& event);
+  virtual void OnMouseRelease(const CtMouseEvent& event);
+  virtual void OnMouseMove(const CtMouseEvent& event);
 
  private:
   CtWidget* parent_;
