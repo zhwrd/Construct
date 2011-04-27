@@ -4,4 +4,5 @@ include_directories(${PROJECT_SOURCE_DIR})
 add_library(frontend  ct_main_window.h ct_main_window.cpp
                       ct_widget.h ct_widget.cpp
                       ct_oscilloscope.h ct_oscilloscope.cpp
+                      ct_input_event.h ct_mouse_event.h
                       )
