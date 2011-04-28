@@ -17,6 +17,9 @@ CtWidget::CtWidget(CtWidget* parent) {
   maximum_width_ = 0;
   minimum_height_ = 0;
   maximum_height_ = 0;
+  if (parent_) {
+    parent_->add_child(this);
+  }
 }
 
 CtWidget::~CtWidget() {
@@ -53,12 +56,15 @@ void CtWidget::set_enabled(bool enabled) {
 }
 
 void CtWidget::redraw() {
+  glPushMatrix();
+  glTranslatef(x_, y_, 0.0);
   Draw();
   for ( CtWidgetList::iterator i = children_.begin();
         i != children_.end();
         ++i) {
     (*i)->redraw();
   }
+  glPopMatrix();
 }
 
 void CtWidget::set_visible(bool visible) {
@@ -75,19 +81,30 @@ void CtWidget::OnMouseDoubleClick(const CtMouseEvent& event) {
 }
 
 void CtWidget::OnMousePress(const CtMouseEvent& event) {
-
+  for ( CtWidgetList::iterator i = children_.begin();
+        i != children_.end();
+        ++i) {
+    (*i)->OnMousePress(event);
+  }
 }
 
 void CtWidget::OnMouseRelease(const CtMouseEvent& event) {
-
+  for ( CtWidgetList::iterator i = children_.begin();
+        i != children_.end();
+        ++i) {
+    (*i)->OnMouseRelease(event);
+  }
 }
 
 void CtWidget::OnMouseMove(const CtMouseEvent& event) {
-
+  for ( CtWidgetList::iterator i = children_.begin();
+        i != children_.end();
+        ++i) {
+    (*i)->OnMouseMove(event);
+  }
 }
 
 void CtWidget::Draw() {
-
 }
 
 } // namespace frontend

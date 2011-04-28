@@ -14,12 +14,12 @@ enum MouseButton {
 };
 
 struct CtMouseEvent : public CtInputEvent {
-  CtMouseEvent() : x(0), y(0), global_x(0), global_y(0), 
+  CtMouseEvent() : x(0), y(0), x_rel(0), y_rel(0), 
                    buttons(NO_BUTTON) {}
   int x;
   int y;
-  int global_x;
-  int global_y;
+  int x_rel;
+  int y_rel;
   MouseButton buttons;
 };
 

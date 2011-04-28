@@ -23,8 +23,9 @@ void CtOscilloscope::Draw() {
   // only supports 1 channel for now
   if (output->num_channels() != 1) return;
 
-  glLoadIdentity();
-  glTranslatef(0, height()/2, 0);
+  glPushMatrix();
+  glTranslatef(0, height()/2.0, 0);
+	glColor3d(0.5, 0, 0);
   glBegin(GL_LINE_STRIP);
     for (int i = 0; i < num_samples; ++i) {
       double sample = output->buffer()[i];
@@ -36,6 +37,7 @@ void CtOscilloscope::Draw() {
     }
   glEnd();
 
+	glPopMatrix();
 }
 
 void CtOscilloscope::set_unitgenerator(core::UnitGenerator* unitgenerator) {

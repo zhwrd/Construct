@@ -1,16 +1,17 @@
 #include "construct_app.h"
 #include <iostream>
-#include <frontend/ct_mouse_event.h>
-#include <frontend/ct_oscilloscope.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
+#include <frontend/ct_mouse_event.h>
+#include <frontend/ct_oscilloscope.h>
+#include <frontend/ct_window.h>
 
 namespace construct {
 
 ConstructApp::ConstructApp() {
   finished_ = false;
-  width_ = 800;
-  height_ = 400;
+  width_ = 1000;
+  height_ = 800;
 }
 
 ConstructApp::~ConstructApp() {
@@ -35,10 +36,11 @@ bool ConstructApp::Initialize() {
   player_->set_driver(*audio_out_);
   player_->set_time_info(time_info);
   core::Oscillator* osc;
-  //osc = player_->CreateOscillator(440, 0.25);
-  osc = player_->CreateOscillator(392.00, 0.25);
-  osc = player_->CreateOscillator(261.63*2, 0.25);
+  osc = player_->CreateOscillator(440, 0);
+  //osc = player_->CreateOscillator(392.00, 0.25);
+  //osc = player_->CreateOscillator(261.63*2, 0.25);
   osc = player_->CreateOscillator(261.63, 0.25);
+  
 
   std::cout << "Player initialized." << std::endl;
 
@@ -49,10 +51,13 @@ bool ConstructApp::Initialize() {
   window_ = new frontend::CtWidget();
   window_->resize(width_, height_);
 
-  frontend::CtOscilloscope* ct_osc = new frontend::CtOscilloscope();
+  frontend::CtWidget* box = new frontend::CtWindow(window_);
+  box->resize(400, 200);
+  box->move(200, 200);
+
+  frontend::CtOscilloscope* ct_osc = new frontend::CtOscilloscope(box);
   ct_osc->set_unitgenerator(osc);
-  window_->add_child(ct_osc);
-  
+
   return true;
 }
 
@@ -79,12 +84,34 @@ void ConstructApp::OnEvent(SDL_Event* event) {
       finished_ = true;
       break;
     case SDL_MOUSEMOTION:
-      mouse_event.x = event->motion.xrel;
-      mouse_event.y = event->motion.yrel;
-      mouse_event.global_x = event->motion.x;
-      mouse_event.global_y = event->motion.y;
+      mouse_event.x_rel = event->motion.xrel;
+      mouse_event.y_rel = -event->motion.yrel;
+      mouse_event.x = event->motion.x;
+      mouse_event.y = height_ - event->motion.y;
       window_->OnMouseMove(mouse_event);
       break;
+    case SDL_MOUSEBUTTONDOWN:
+      mouse_event.x = event->button.x;
+      mouse_event.y = height_ - event->button.y;
+      if (event->button.button == SDL_BUTTON_LEFT) {
+        mouse_event.buttons = frontend::LEFT_BUTTON;
+      }
+      if (event->button.button == SDL_BUTTON_RIGHT) {
+        mouse_event.buttons = frontend::RIGHT_BUTTON;
+      }
+      window_->OnMousePress(mouse_event);
+      break; 
+    case SDL_MOUSEBUTTONUP:
+      mouse_event.x = event->button.x;
+      mouse_event.y = height_ - event->button.y;
+      if (event->button.button == SDL_BUTTON_LEFT) {
+        mouse_event.buttons = frontend::LEFT_BUTTON;
+      }
+      if (event->button.button == SDL_BUTTON_RIGHT) {
+        mouse_event.buttons = frontend::RIGHT_BUTTON;
+      }
+      window_->OnMouseRelease(mouse_event);
+      break; 
   }
 }
 
