@@ -1,7 +1,7 @@
 #include "signal_buffer.h"
-#include <utility/dsp.h>
 #include <cstdlib>
 #include <cassert>
+#include "utility/dsp.h"
 
 namespace construct {
 namespace core {

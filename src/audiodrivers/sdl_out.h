@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <SDL/SDL_audio.h>
-#include <audiodrivers/audio_driver.h>
+#include "audiodrivers/audio_driver.h"
 
 namespace construct {
 namespace audiodrivers {

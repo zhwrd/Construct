@@ -1,21 +1,23 @@
 #include "ct_oscilloscope.h"
 #include <iostream>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include "core/unit_generator.h"
 
 namespace construct {
 namespace frontend {
 
 CtOscilloscope::CtOscilloscope(CtWidget* parent) : CtWidget(parent) {
-  unitgenerator_ = NULL;
+  unit_generator_ = NULL;
   y_sample_ = 0;
 }
 
 CtOscilloscope::~CtOscilloscope() {
-
 }
 
 void CtOscilloscope::Draw() {
-  if (!unitgenerator_) { return; }
-  core::SignalBuffer* output = unitgenerator_->output().signalbuffer();
+  if (!unit_generator_) { return; }
+  core::SignalBuffer* output = unit_generator_->output().signalbuffer();
   int num_samples = output->num_samples();
   double x_scale = (double)width()/num_samples;
   double x_sample = 0;
@@ -40,8 +42,8 @@ void CtOscilloscope::Draw() {
 	glPopMatrix();
 }
 
-void CtOscilloscope::set_unitgenerator(core::UnitGenerator* unitgenerator) {
-  unitgenerator_ = unitgenerator;
+void CtOscilloscope::set_unit_generator(core::UnitGenerator* unit_generator) {
+  unit_generator_ = unit_generator;
 }
 
 }  // namespace frontend 

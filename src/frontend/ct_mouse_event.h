@@ -1,7 +1,7 @@
 #ifndef SRC_FRONTEND_CT_MOUSE_EVENT_H_
 #define SRC_FRONTEND_CT_MOUSE_EVENT_H_
 
-#include <frontend/ct_input_event.h>
+#include "frontend/ct_input_event.h"
 
 namespace construct {
 namespace frontend {

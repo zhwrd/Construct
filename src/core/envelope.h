@@ -1,8 +1,8 @@
 #ifndef SRC_CORE_ENVELOPE_H_
 #define SRC_CORE_ENVELOPE_H_
 
-#include "unit_generator.h"
 #include <cassert>
+#include "unit_generator.h"
 
 namespace construct {
 namespace core {

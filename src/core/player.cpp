@@ -1,8 +1,8 @@
 #include "player.h"
 #include <cmath>
-#include <audiodrivers/audio_driver.h>
-#include <core/wire.h>
-#include <utility/dsp.h>
+#include "core/wire.h"
+#include "utility/dsp.h"
+#include "audiodrivers/audio_driver.h"
 
 namespace construct {
 namespace core {

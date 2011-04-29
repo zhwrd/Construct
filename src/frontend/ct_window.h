@@ -3,18 +3,16 @@
 
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
-
-#include <frontend/ct_widget.h>
+#include "frontend/ct_widget.h"
+#include "frontend/ct_mouse_event.h"
 
 namespace construct {
 namespace frontend {
 
 class CtWindow : public CtWidget {
  public:
-  explicit CtWindow(CtWidget* parent = NULL);
+	explicit CtWindow(CtWidget* parent = NULL);
   virtual ~CtWindow();
-
-  bool Initialize();
 
  protected:
   void Draw();

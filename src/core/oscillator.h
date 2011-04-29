@@ -1,7 +1,7 @@
 #ifndef SRC_CORE_OSCILLATOR_H_
 #define SRC_CORE_OSCILLATOR_H_
 
-#include <core/unit_generator.h>
+#include "core/unit_generator.h"
 
 namespace construct {
 namespace core {

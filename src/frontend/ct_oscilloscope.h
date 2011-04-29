@@ -1,10 +1,12 @@
 #ifndef SRC_FRONTEND_CT_OSCILLOSCOPE
 #define SRC_FRONTEND_CT_OSCILLOSCOPE
 
-#include <frontend/ct_widget.h>
-#include <core/unit_generator.h>
+#include "frontend/ct_widget.h"
 
 namespace construct {
+namespace core {
+class UnitGenerator;
+} // namespace core
 namespace frontend {
 
 class CtOscilloscope : public CtWidget {
@@ -14,13 +16,13 @@ class CtOscilloscope : public CtWidget {
 
   virtual void Draw();
 
-  inline core::UnitGenerator* unitgenerator() const {
-    return unitgenerator_;
+  inline core::UnitGenerator* unit_generator() const {
+    return unit_generator_;
   }
-  void set_unitgenerator(core::UnitGenerator* unitgenerator);
+  void set_unit_generator(core::UnitGenerator* unit_generator);
 
  private:
-  core::UnitGenerator* unitgenerator_;
+  core::UnitGenerator* unit_generator_;
   int y_sample_;
 
 };

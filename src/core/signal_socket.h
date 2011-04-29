@@ -1,10 +1,10 @@
 #ifndef SRC_CORE_SIGNAL_SOCKET_H_
 #define SRC_CORE_SIGNAL_SOCKET_H_
 
-#include <core/signal_buffer.h>
-#include <core/wire.h>
 #include <string>
 #include <vector>
+#include "core/signal_buffer.h"
+#include "core/wire.h"
 
 namespace construct {
 namespace core {

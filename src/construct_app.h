@@ -3,9 +3,9 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
-#include <core/player.h>
-#include <audiodrivers/coreaudio_out.h>
-#include <frontend/ct_widget.h>
+#include "core/player.h"
+#include "audiodrivers/coreaudio_out.h"
+#include "frontend/ct_widget.h"
 
 namespace construct {
 

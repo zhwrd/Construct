@@ -1,7 +1,6 @@
 #include "envelope.h"
-#include <cassert>
 #include <iostream>
-#include <utility/math.h>
+#include "utility/math.h"
 
 namespace construct {
 namespace core {

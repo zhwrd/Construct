@@ -2,16 +2,16 @@
 #include <iostream>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
-#include <frontend/ct_mouse_event.h>
-#include <frontend/ct_oscilloscope.h>
-#include <frontend/ct_window.h>
+#include "frontend/ct_mouse_event.h"
+#include "frontend/ct_oscilloscope.h"
+#include "frontend/ct_window.h"
 
 namespace construct {
 
 ConstructApp::ConstructApp() {
   finished_ = false;
-  width_ = 1000;
-  height_ = 800;
+  width_ = 600;
+  height_ = 600;
 }
 
 ConstructApp::~ConstructApp() {
@@ -56,7 +56,7 @@ bool ConstructApp::Initialize() {
   box->move(200, 200);
 
   frontend::CtOscilloscope* ct_osc = new frontend::CtOscilloscope(box);
-  ct_osc->set_unitgenerator(osc);
+  ct_osc->set_unit_generator(osc);
 
   return true;
 }
@@ -69,6 +69,7 @@ int ConstructApp::Execute() {
     while (SDL_PollEvent(&event)) {
       OnEvent(&event);
     }
+    window_->cleanup();
     glClear(GL_COLOR_BUFFER_BIT);
     window_->redraw();
     SDL_GL_SwapBuffers();
@@ -78,6 +79,7 @@ int ConstructApp::Execute() {
 }
 
 void ConstructApp::OnEvent(SDL_Event* event) {
+  // TODO: Fix button overrride
   frontend::CtMouseEvent mouse_event;
   switch (event->type) {
     case SDL_QUIT:

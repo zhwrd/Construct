@@ -2,8 +2,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <cassert>
-#include <utility/math.h>
 #include <cmath>
+#include "utility/math.h"
 
 namespace construct {
 namespace core {

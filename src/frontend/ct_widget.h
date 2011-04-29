@@ -2,13 +2,11 @@
 #define SRC_FRONTEND_CT_WIDGET_H_
 
 #include <vector>
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <frontend/ct_mouse_event.h>
 
 namespace construct {
 class ConstructApp;
 namespace frontend {
+class CtMouseEvent;
 
 class CtWidget {
  public:
@@ -22,9 +20,8 @@ class CtWidget {
   inline CtWidget* parent() const { return parent_; }
   inline const CtWidgetList& children() { return children_; }
   void set_parent(CtWidget* parent);
-  void add_child(CtWidget* child);
-  void remove_child(CtWidget* child);
   bool is_parent_of(CtWidget* child);
+  void cleanup();
 
   // States
   inline bool is_window() const { return is_window_; }
@@ -73,6 +70,8 @@ class CtWidget {
   }
 
  protected:
+  void invalidate();
+  void invalidate_child(CtWidget* child);
   // Mouse events
   virtual void OnMouseDoubleClick(const CtMouseEvent& event);
   virtual void OnMousePress(const CtMouseEvent& event);
@@ -81,8 +80,11 @@ class CtWidget {
   virtual void Draw();
 
  private:
+  void add_child(CtWidget* child);
+  void remove_child(CtWidget* child);
   CtWidget* parent_;
   CtWidgetList children_;
+  CtWidgetList invalid_children_;
   bool enabled_;
   bool is_window_;
   bool visible_;

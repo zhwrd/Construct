@@ -1,8 +1,8 @@
 #ifndef SRC_CORE_UNIT_GENERATOR_H_
 #define SRC_CORE_UNIT_GENERATOR_H_
 
-#include <core/signal_socket.h>
-#include <core/player_time_info.h>
+#include "core/signal_socket.h"
+#include "core/player_time_info.h"
 
 namespace construct {
 namespace core {

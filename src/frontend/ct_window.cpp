@@ -1,6 +1,6 @@
 #include "ct_window.h"
 #include <iostream>
-#include <frontend/ct_mouse_event.h>
+#include "frontend/ct_mouse_event.h"
 
 namespace construct {
 namespace frontend {
@@ -12,11 +12,6 @@ CtWindow::CtWindow(CtWidget* parent) : CtWidget(parent) {
 }
 
 CtWindow::~CtWindow() {
-
-}
-
-bool CtWindow::Initialize() {
-
 }
 
 void CtWindow::Draw() {
@@ -88,7 +83,7 @@ void CtWindow::OnMousePress(const CtMouseEvent& event) {
 void CtWindow::OnMouseRelease(const CtMouseEvent& event) {
 	if (event.buttons == LEFT_BUTTON) {
 		if (in_exit_button(event.x, event.y) && exit_pressed_) {
-			// TODO: SCHEDULE DESTRUCTION
+			invalidate();
 		} 
 		exit_pressed_ = false;
 		move_pressed_ = false;

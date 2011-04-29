@@ -1,8 +1,7 @@
 #ifndef CONSTRUCT_CORE_STEP_GENERATOR_H_
 #define CONSTRUCT_CORE_STEP_GENERATOR_H_
 
-#include <core/unit_generator.h>
-#include <cassert>
+#include "core/unit_generator.h"
 
 namespace construct {
 namespace core {

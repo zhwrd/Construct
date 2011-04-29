@@ -1,9 +1,9 @@
 #ifndef SRC_CORE_PLAYER_H_
 #define SRC_CORE_PLAYER_H_
 
-#include <core/oscillator.h>
-#include <core/envelope.h>
-#include <core/player_time_info.h>
+#include "core/oscillator.h"
+#include "core/envelope.h"
+#include "core/player_time_info.h"
 
 namespace construct {
 

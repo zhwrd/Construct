@@ -1,11 +1,14 @@
 #include "ct_widget.h"
 #include <algorithm>
+#include <iostream>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 
 namespace construct {
 namespace frontend {
 
 CtWidget::CtWidget(CtWidget* parent) {
-  parent_ = parent;
+  parent_ = NULL;
   enabled_ = true;
   is_window_ = false;
   visible_ = true;
@@ -17,13 +20,20 @@ CtWidget::CtWidget(CtWidget* parent) {
   maximum_width_ = 0;
   minimum_height_ = 0;
   maximum_height_ = 0;
-  if (parent_) {
-    parent_->add_child(this);
-  }
+  set_parent(parent);
 }
 
 CtWidget::~CtWidget() {
-
+  cleanup();
+  CtWidgetList children = children_;
+  for (CtWidgetList::iterator i = children.begin();
+       i != children.end();
+       ++i) {
+    CtWidget* child = *i;
+    delete child;
+  }
+  children_.clear();
+  set_parent(NULL);
 }
 
 void CtWidget::set_parent(CtWidget* parent) {
@@ -31,25 +41,34 @@ void CtWidget::set_parent(CtWidget* parent) {
     parent_->remove_child(this);
   }
   parent_ = parent;
-}
-
-void CtWidget::add_child(CtWidget* child) {
-  children_.push_back(child);
-  child->resize(width_, height_);
-}
-
-void CtWidget::remove_child(CtWidget* child) {
-  std::remove(children_.begin(), children_.end(), child);
+  if (parent_) {
+    parent_->add_child(this);
+    resize(parent_->width(), parent_->height());
+  }
 }
 
 bool CtWidget::is_parent_of(CtWidget* child) {
   return std::count(children_.begin(), children_.end(), child);
 }
 
+void CtWidget::cleanup() {
+  for (CtWidgetList::iterator i = invalid_children_.begin();
+       i != invalid_children_.end();
+       ++i) {
+    delete *i;
+  }
+  invalid_children_.clear();
+  for (CtWidgetList::iterator i = children_.begin();
+       i != children_.end();
+       ++i) {
+    (*i)->cleanup();
+  }
+}
+
 void CtWidget::set_enabled(bool enabled) {
-  for ( CtWidgetList::iterator i = children_.begin();
-        i != children_.end();
-        ++i) {
+  for (CtWidgetList::iterator i = children_.begin();
+       i != children_.end();
+       ++i) {
     (*i)->set_enabled(enabled);
   }
   enabled_ = enabled;
@@ -74,6 +93,16 @@ void CtWidget::set_visible(bool visible) {
     (*i)->set_visible(visible);
   }
   visible_ = visible;
+}
+
+void CtWidget::invalidate() {
+  if (parent_) {
+    parent_->invalidate_child(this);
+  }
+}
+
+void CtWidget::invalidate_child(CtWidget* child) {
+  invalid_children_.push_back(child);
 }
 
 void CtWidget::OnMouseDoubleClick(const CtMouseEvent& event) {
@@ -105,6 +134,22 @@ void CtWidget::OnMouseMove(const CtMouseEvent& event) {
 }
 
 void CtWidget::Draw() {
+
+}
+
+void CtWidget::add_child(CtWidget* child) {
+  if (!is_parent_of(child)) {
+    children_.push_back(child);
+  } 
+}
+
+void CtWidget::remove_child(CtWidget* child) {
+  CtWidgetList::iterator i = std::find(children_.begin(),
+                                       children_.end(),
+                                       child);
+  if (i != children_.end()) {
+    children_.erase(i);
+  }
 }
 
 } // namespace frontend
